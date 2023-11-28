@@ -6,6 +6,7 @@ package com.example.LostAndFoundApp.model;
         PHONE,
         JEWELRY,
         GLASSES,
+        KEYS,
         OTHER;
     }
 
