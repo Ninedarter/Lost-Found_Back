@@ -1,6 +1,6 @@
 package com.example.LostAndFoundApp.model;
 
-    public enum ItemType {
+    public enum ItemCategory {
         CLOTHES,
         WALLET,
         PHONE,
