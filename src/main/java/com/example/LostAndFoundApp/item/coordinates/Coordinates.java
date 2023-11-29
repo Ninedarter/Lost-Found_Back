@@ -1,4 +1,4 @@
-package com.example.LostAndFoundApp.model;
+package com.example.LostAndFoundApp.item.coordinates;
 
 
 import jakarta.persistence.*;

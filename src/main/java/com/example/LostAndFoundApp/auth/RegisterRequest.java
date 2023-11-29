@@ -1,5 +1,6 @@
 package com.example.LostAndFoundApp.auth;
 
+import com.example.LostAndFoundApp.user.Gender;
 import com.example.LostAndFoundApp.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,5 +17,7 @@ public class RegisterRequest {
   private String lastname;
   private String email;
   private String password;
+  private Gender gender;
+  private String dob;
   private Role role;
 }

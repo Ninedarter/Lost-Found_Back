@@ -1,6 +1,5 @@
-package com.example.LostAndFoundApp.repository;
+package com.example.LostAndFoundApp.item.coordinates;
 
-import com.example.LostAndFoundApp.model.Coordinates;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CoordinatesRepository extends JpaRepository<Coordinates,Long> {

@@ -8,12 +8,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -22,15 +22,30 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_user")
+@Table(name = "users")
 public class User implements UserDetails {
 
   @Id
   @GeneratedValue
   private Integer id;
+
+  @NonNull
   private String firstname;
+
+  @NonNull
   private String lastname;
+
+  @NonNull
   private String email;
+
+  @NonNull
+  private LocalDate dob;
+
+  @NonNull
+  @Enumerated(EnumType.STRING)
+  private Gender gender;
+
+  @NonNull
   private String password;
 
   @Enumerated(EnumType.STRING)
