@@ -24,7 +24,7 @@ public class LostItem implements Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @NonNull
     private ItemCategory category;

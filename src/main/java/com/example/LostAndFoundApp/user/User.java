@@ -54,17 +54,6 @@ public class User implements UserDetails {
   @OneToMany(mappedBy = "user")
   private List<Token> tokens;
 
-  public User(@NonNull String firstname, @NonNull String lastname, @NonNull String email, @NonNull LocalDate dob, @NonNull Gender gender, @NonNull String password, Role role, List<Token> tokens) {
-    this.firstname = firstname;
-    this.lastname = lastname;
-    this.email = email;
-    this.dob = dob;
-    this.gender = gender;
-    this.password = password;
-    this.role = role;
-    this.tokens = tokens;
-  }
-
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return role.getAuthorities();
