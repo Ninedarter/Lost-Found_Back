@@ -1,4 +1,4 @@
-package com.example.LostAndFoundApp.service;
+package com.example.LostAndFoundApp.mapping;
 
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;

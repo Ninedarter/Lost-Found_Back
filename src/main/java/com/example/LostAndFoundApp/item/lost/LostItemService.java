@@ -1,4 +1,4 @@
-package com.example.LostAndFoundApp.service;
+package com.example.LostAndFoundApp.item.lost;
 
 import lombok.Data;
 import org.springframework.stereotype.Service;
