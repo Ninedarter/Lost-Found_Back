@@ -2,31 +2,32 @@ package com.example.LostAndFoundApp.model;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "found_items")
+@AllArgsConstructor
+@NoArgsConstructor
 public class FoundItem implements Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NonNull
     private ItemCategory category;
 
+
     @NonNull
     private String title;
 
-    @NonNull
-    private Coordinates coordinates;
 
     @NonNull
     private LocalDate dateFound;
@@ -37,13 +38,25 @@ public class FoundItem implements Item {
     @NonNull
     private LocalDateTime creationTime;
 
-    public FoundItem(long id, @NonNull ItemCategory category, @NonNull String title, @NonNull Coordinates coordinates, @NonNull LocalDate dateFound, @Nullable String description, @NonNull LocalDateTime creationTime) {
-        this.id = id;
+
+    @NonNull
+    @ManyToOne
+    @JoinColumn(name = "finder_id")
+    private User user;
+
+
+    @OneToOne
+    @JoinColumn(name = "coordinates_id")
+    private Coordinates coordinatesId;
+
+
+    public FoundItem(@NonNull ItemCategory category, @NonNull String title, @NonNull Coordinates coordinatesId, @NonNull LocalDate dateFound, String description, @NonNull LocalDateTime creationTime, @NonNull User user) {
         this.category = category;
         this.title = title;
-        this.coordinates = coordinates;
+        this.coordinatesId = coordinatesId;
         this.dateFound = dateFound;
         this.description = description;
         this.creationTime = creationTime;
+        this.user = user;
     }
 }

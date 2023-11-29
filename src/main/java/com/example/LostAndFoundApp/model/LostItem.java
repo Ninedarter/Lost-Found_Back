@@ -2,17 +2,20 @@ package com.example.LostAndFoundApp.model;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+
+@Data
 @Entity
 @Table(name = "lost_items")
+@AllArgsConstructor
+@NoArgsConstructor
 public class LostItem implements Item {
 
     @Id
@@ -25,8 +28,6 @@ public class LostItem implements Item {
     @NonNull
     private String title;
 
-    @NonNull
-    private Coordinates coordinates;
 
     @NonNull
     private LocalDate dateLost;
@@ -37,13 +38,25 @@ public class LostItem implements Item {
     @NonNull
     private LocalDateTime creationTime;
 
-    public LostItem(long id, @NonNull ItemCategory category, @NonNull String title, @NonNull Coordinates coordinates, @NonNull LocalDate dateLost, @Nullable String description, @NonNull LocalDateTime creationTime) {
-        this.id = id;
+    @NonNull
+    @ManyToOne
+    @JoinColumn(name = "loser_id")
+    private User user;
+
+
+    @OneToOne
+    @JoinColumn(name = "coordinates_id")
+    private Coordinates coordinatesId;
+
+    public LostItem(@NonNull ItemCategory category, @NonNull String title, @NonNull Coordinates coordinatesId, @NonNull LocalDate dateLost, String description, @NonNull LocalDateTime creationTime, @NonNull User user) {
         this.category = category;
         this.title = title;
-        this.coordinates = coordinates;
+        this.coordinatesId = coordinatesId;
         this.dateLost = dateLost;
         this.description = description;
         this.creationTime = creationTime;
+        this.user = user;
     }
+
+
 }

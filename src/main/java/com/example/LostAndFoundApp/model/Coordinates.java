@@ -1,7 +1,28 @@
 package com.example.LostAndFoundApp.model;
 
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Coordinates {
 
-    private double latitude;
-    private double longitude;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private Double latitude;
+    private Double longitude;
+
+
+    public Coordinates(Double latitude, Double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+
 }
