@@ -23,12 +23,11 @@ public class AppConfig {
     @Bean
     CommandLineRunner commandLineRunner(UserRepository userRepository, LostItemRepository lostItemRepository, FoundItemRepository foundItemRepository, CoordinatesRepository coordinatesRepository) {
         return args -> {
-           User user222 = new User(
+            User user222 = new User(
                     "Alice",
                     "Johnson",
                     "user1@example.com",
                     LocalDate.of(1995, 3, 10),
-
                     Gender.FEMALE,
                     "1234",
                     null,
