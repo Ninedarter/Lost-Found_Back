@@ -1,17 +1,21 @@
 package com.example.LostAndFoundApp.config;
 
-import com.example.LostAndFoundApp.model.*;
-import com.example.LostAndFoundApp.repository.CoordinatesRepository;
-import com.example.LostAndFoundApp.repository.FoundItemRepository;
-import com.example.LostAndFoundApp.repository.LostItemRepository;
-import com.example.LostAndFoundApp.repository.UserRepository;
+
+import com.example.LostAndFoundApp.item.ItemCategory;
+import com.example.LostAndFoundApp.item.coordinates.Coordinates;
+import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
+import com.example.LostAndFoundApp.item.found.FoundItem;
+import com.example.LostAndFoundApp.item.found.FoundItemRepository;
+import com.example.LostAndFoundApp.item.lost.LostItemRepository;
+import com.example.LostAndFoundApp.user.Gender;
+import com.example.LostAndFoundApp.user.User;
+import com.example.LostAndFoundApp.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Configuration
 public class AppConfig {
@@ -19,13 +23,16 @@ public class AppConfig {
     @Bean
     CommandLineRunner commandLineRunner(UserRepository userRepository, LostItemRepository lostItemRepository, FoundItemRepository foundItemRepository, CoordinatesRepository coordinatesRepository) {
         return args -> {
-            User user222 = new User(
-                    "user1@example.com",
+           User user222 = new User(
                     "Alice",
                     "Johnson",
+                    "user1@example.com",
                     LocalDate.of(1995, 3, 10),
+
                     Gender.FEMALE,
-                    List.of()
+                    "1234",
+                    null,
+                    null
             );
             userRepository.save(user222);
 
