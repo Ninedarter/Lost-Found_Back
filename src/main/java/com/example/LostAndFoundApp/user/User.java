@@ -39,6 +39,9 @@ public class User implements UserDetails {
   private String email;
 
   @NonNull
+  private String phoneNumber;
+
+  @NonNull
   private LocalDate dob;
 
   @NonNull
