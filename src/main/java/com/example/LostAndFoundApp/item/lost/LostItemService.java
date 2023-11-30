@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
 @RequiredArgsConstructor
 public class LostItemService {
@@ -22,7 +21,7 @@ public class LostItemService {
     }
 
     public LostItem add(LostItemRequest request) {
-        LostItem item = mappingService.mapItem(request);
+        LostItem item = mappingService.mapLostItem(request);
         lostItemRepository.save(item);
         return item;
     }
@@ -51,7 +50,7 @@ public class LostItemService {
     }
 
     public String update(LostItemRequest request) {
-        LostItem item = mappingService.mapItem(request);
+        LostItem item = mappingService.mapLostItem(request);
         try {
             Optional<LostItem> lostItemOptional = lostItemRepository.findById(request.getId());
             if (lostItemOptional.isPresent()) {
@@ -64,6 +63,5 @@ public class LostItemService {
             return "BAD REQUEST";
         }
     }
-
 
 }
