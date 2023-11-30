@@ -1,4 +1,4 @@
-package com.example.LostAndFoundApp.service;
+package com.example.LostAndFoundApp.item.lost;
 
 import com.example.LostAndFoundApp.item.lost.LostItem;
 import com.example.LostAndFoundApp.item.lost.LostItemRepository;
