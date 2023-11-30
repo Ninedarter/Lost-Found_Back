@@ -5,7 +5,8 @@ import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
 import com.example.LostAndFoundApp.item.found.FoundItemRepository;
 import com.example.LostAndFoundApp.item.lost.LostItem;
 import com.example.LostAndFoundApp.item.lost.LostItemRepository;
-import com.example.LostAndFoundApp.request.LostItemRequest;
+
+import com.example.LostAndFoundApp.item.lost.LostItemRequest;
 import com.example.LostAndFoundApp.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
