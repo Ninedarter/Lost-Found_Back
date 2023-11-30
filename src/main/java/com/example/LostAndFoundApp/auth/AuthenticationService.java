@@ -42,6 +42,7 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .dob(LocalDate.parse(request.getDob()))
                 .gender(request.getGender())
+                .phoneNumber(request.getPhoneNumber())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
