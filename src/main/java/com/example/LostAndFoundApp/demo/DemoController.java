@@ -21,7 +21,7 @@ public class DemoController {
 
     @GetMapping("/")
     public ResponseEntity<String> sayHello() {
-        return ResponseEntity.ok("Viskas veikia");
+        return ResponseEntity.ok("All good");
     }
 
     @GetMapping("/all")
