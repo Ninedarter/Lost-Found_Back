@@ -36,6 +36,6 @@ public class LostItemRequest {
     @NonNull
     private Double longitude;
 
-    private String sveikinimas;
+
 
 }
