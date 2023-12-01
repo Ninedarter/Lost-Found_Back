@@ -44,7 +44,7 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("Save User: Returns Saved User with ID > 0")
-    public void UserRepository_Save_ReturnSavedUser() {
+    public void save_returnSavedUser() {
 
         Assertions.assertNotNull(savedUser);
         Assertions.assertTrue(savedUser.getId() > 0);
@@ -71,7 +71,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    @DisplayName("Given a saved user, when findById is called, then the returned user should match the saved user")
+    @DisplayName("Save user: find user by ID")
     public void findByID_returnUser() {
 
         User retrievedUser = userRepository.findById(savedUser.getId()).orElse(null);
@@ -104,7 +104,7 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("Delete User: Repository Should Not Contain Deleted User")
-    public void deleteUser_ReturnUserIsEmpty() {
+    public void deleteUser_returnUserIsEmpty() {
 
         userRepository.deleteById(savedUser.getId());
 
@@ -116,7 +116,7 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("Find User by Existing Email: Returns User")
-    public void findByEmail_WithExistingEmail_ReturnsUser() {
+    public void findByEmail_withExistingEmail_returnsUser() {
 
         Optional<User> foundUser = userRepository.findByEmail(savedUser.getEmail());
         Assertions.assertTrue(foundUser.isPresent());
@@ -125,7 +125,7 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("Find User by Non-Existing Email: Returns Empty Optional")
-    public void findByEmail_WithNonExistingEmail_ReturnsEmptyOptional() {
+    public void findByEmail_withNonExistingEmail_returnsEmptyOptional() {
 
         Optional<User> foundUser = userRepository.findByEmail("nonexistent@example.com");
         Assertions.assertTrue(foundUser.isEmpty());
@@ -133,14 +133,14 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("Save User with User Role: Has User Role Authorities")
-    public void saveUser_WithUserRole_HasUserRoleAuthorities() {
+    public void saveUser_withUserRole_hasUserRoleAuthorities() {
 
         Assertions.assertTrue(savedUser.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER")));
     }
 
     @Test
     @DisplayName("Save User with ADMIN Role: Has ADMIN Role Authorities")
-    public void saveUser_WithAdminRole_HasAdminRoleAuthorities() {
+    public void saveUser_withAdminRole_hasAdminRoleAuthorities() {
         User adminUser = User.builder()
                 .firstname("Admin")
                 .lastname("User")
