@@ -1,10 +1,11 @@
 package com.example.LostAndFoundApp.item.found;
 
 
-import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
+import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
 import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
 import com.example.LostAndFoundApp.mapping.MappingService;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,13 +29,26 @@ public class FoundItemService {
     }
 
 
-    public FoundItem add(FoundItemRequest request) {
-        FoundItem item = mappingService.mapFoundItem(request);
-        foundItemRepository.save(item);
-        Coordinates foundItemCoordinates = new Coordinates(request.getLatitude(), request.getLongitude());
-        coordinatesRepository.save(foundItemCoordinates);
-        return item;
+    public FoundItemResponse add(FoundItemRequest request) {
+        if (null == request.getId()) {
+            request.setId(0L);
+        }
+        Optional<FoundItem> item = foundItemRepository.findById(request.getId());
+        try {
+            if (doesExists(item)) {
+                throw new EntityExistsException();
+            }
+            FoundItem mappedItem = mappingService.mapFoundItem(request);
+            coordinatesRepository.save(mappedItem.getCoordinates());
+            foundItemRepository.save(mappedItem);
+            return new FoundItemResponse("Created successfully");
+
+        } catch (EntityExistsException e) {
+            return new FoundItemResponse("Item already exists");
+        }
+
     }
+
 
     public FoundItemResponse getById(Long id) {
         Optional<FoundItem> item = foundItemRepository.findById(id);
@@ -63,11 +77,10 @@ public class FoundItemService {
     }
 
 
-
-
     public String update(FoundItemRequest request) {
         FoundItem mappedItem = mappingService.mapFoundItem(request);
         try {
+
             Optional<FoundItem> item = foundItemRepository.findById(request.getId());
             if (!item.isPresent()) {
                 foundItemRepository.save(mappedItem);
@@ -79,8 +92,6 @@ public class FoundItemService {
             return "BAD REQUEST";
         }
     }
-
-
 
 
     public FoundItem findById(Long id) {

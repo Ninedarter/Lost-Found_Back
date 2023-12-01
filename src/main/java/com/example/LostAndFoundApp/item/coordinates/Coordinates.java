@@ -1,6 +1,7 @@
 package com.example.LostAndFoundApp.item.coordinates;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +16,11 @@ public class Coordinates {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @JsonProperty("latitude")
     private Double latitude;
+
+    @JsonProperty("longitude")
     private Double longitude;
 
 

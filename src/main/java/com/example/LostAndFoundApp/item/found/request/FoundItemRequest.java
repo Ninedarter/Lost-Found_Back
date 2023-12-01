@@ -1,11 +1,12 @@
-package com.example.LostAndFoundApp.item.found;
+package com.example.LostAndFoundApp.item.found.request;
 
 import com.example.LostAndFoundApp.item.ItemCategory;
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,26 +17,23 @@ import java.time.LocalDateTime;
 public class FoundItemRequest {
 
 
-    @NonNull
+
     private String email;
-    @NonNull
+
+    @Nullable
     private Long id;
-    @NonNull
+
+
     private ItemCategory category;
-    @NonNull
     private String title;
-    @NonNull
     private LocalDate dateFound;
-    @NonNull
     private String description;
-    @NonNull
     private LocalDateTime creationTime;
-    @NonNull
     private Coordinates coordinates;
-
-
-    @NonNull
+    @Nullable
     private Double latitude;
-    @NonNull
+    @Nullable
     private Double longitude;
+
+
 }

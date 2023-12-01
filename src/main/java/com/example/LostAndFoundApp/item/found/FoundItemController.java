@@ -1,7 +1,7 @@
 package com.example.LostAndFoundApp.item.found;
 
+import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
 import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/foundItem")
+@RequestMapping("/api/v1/foundItem")
 
 public class FoundItemController {
 
@@ -25,12 +25,13 @@ public class FoundItemController {
         return new ResponseEntity<>(allFoundItems, HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<FoundItem> add(@RequestBody FoundItemRequest foundItem) {
-        FoundItem addedFoundItem = foundItemService.add(foundItem);
-        return new ResponseEntity<>(addedFoundItem, HttpStatus.CREATED);
-    }
 
+    @PostMapping("/add")
+    public ResponseEntity<FoundItemResponse> add(@RequestBody FoundItemRequest foundItem) {
+        System.out.println(foundItem);
+        FoundItemResponse result = foundItemService.add(foundItem);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<FoundItemResponse> getById(@PathVariable("id") Long id) {
@@ -42,9 +43,8 @@ public class FoundItemController {
         }
     }
 
-
     @PutMapping("/update")
-    public ResponseEntity<FoundItem> update(@RequestBody FoundItemRequest foundItem) {
+    public ResponseEntity<FoundItemResponse> update(@RequestBody FoundItemRequest foundItem) {
         foundItemService.update(foundItem);
         return new ResponseEntity<>(HttpStatus.OK);
     }

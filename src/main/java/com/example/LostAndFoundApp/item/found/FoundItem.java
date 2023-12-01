@@ -67,6 +67,17 @@ public class FoundItem implements Item {
         this.description = description;
     }
 
+
+    public boolean equals(Object obj) {
+        FoundItem item = (FoundItem) obj;
+
+        if (title.equals(item.title)) {
+            return true;
+        }
+        return false;
+    }
+
+
     @Override
     public String toString() {
         return "FoundItem{" +
