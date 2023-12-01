@@ -7,15 +7,13 @@ import com.example.LostAndFoundApp.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @Entity
 @Table(name = "found_items")
 @AllArgsConstructor
@@ -29,10 +27,8 @@ public class FoundItem implements Item {
     @NonNull
     private ItemCategory category;
 
-
     @NonNull
     private String title;
-
 
     @NonNull
     private LocalDate dateFound;

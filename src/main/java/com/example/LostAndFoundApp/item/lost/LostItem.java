@@ -6,10 +6,7 @@ import com.example.LostAndFoundApp.item.ItemCategory;
 import com.example.LostAndFoundApp.user.User;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +14,7 @@ import java.util.List;
 
 
 @Data
+@Builder
 @Entity
 @Table(name = "lost_items")
 @AllArgsConstructor
