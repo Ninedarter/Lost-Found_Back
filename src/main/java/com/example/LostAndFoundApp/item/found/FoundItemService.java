@@ -3,11 +3,10 @@ package com.example.LostAndFoundApp.item.found;
 
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
-import com.example.LostAndFoundApp.item.lost.LostItemException;
+import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
 import com.example.LostAndFoundApp.mapping.MappingService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,15 +22,11 @@ public class FoundItemService {
     private final MappingService mappingService;
 
 
-
-
     public List<FoundItem> getAll() {
         List<FoundItem> all = foundItemRepository.findAll();
-
-
-        String servisas = "servisas";
         return foundItemRepository.findAll();
     }
+
 
     public FoundItem add(FoundItemRequest request) {
         FoundItem item = mappingService.mapFoundItem(request);
@@ -41,34 +36,41 @@ public class FoundItemService {
         return item;
     }
 
-    public FoundItem getById(Long id) {
+    public FoundItemResponse getById(Long id) {
+        Optional<FoundItem> item = foundItemRepository.findById(id);
         try {
-            Optional<FoundItem> item = foundItemRepository.findById(id);
-            if (item.isPresent()) {
-                return item.get();
-            } else {
-                throw new LostItemException("Item not found");
+            if (!doesExists(item)) {
+                throw new EntityNotFoundException();
             }
-        } catch (LostItemException e) {
-            return null;
+            FoundItem itemById = item.get();
+            return new FoundItemResponse(itemById, "FOUND BY ID", true);
+        } catch (EntityNotFoundException e) {
+            return new FoundItemResponse(false, "NOT FOUND");
         }
     }
 
-    public void delete(Long id) {
-        Optional<FoundItem> lostItemOptional = foundItemRepository.findById(id);
-        if (lostItemOptional.isPresent()) {
+    public FoundItemResponse delete(Long id) {
+        Optional<FoundItem> item = foundItemRepository.findById(id);
+        try {
+            if (!doesExists(item)) {
+                throw new EntityNotFoundException("LostItem with ID " + id + " not found");
+            }
             foundItemRepository.deleteById(id);
-        } else {
-            throw new EntityNotFoundException("LostItem with ID " + id + " not found");
+            return new FoundItemResponse(true, "Deleted successfully");
+        } catch (EntityNotFoundException e) {
+            return new FoundItemResponse(false, "Not found");
         }
     }
+
+
+
 
     public String update(FoundItemRequest request) {
-        FoundItem item = mappingService.mapFoundItem(request);
+        FoundItem mappedItem = mappingService.mapFoundItem(request);
         try {
-            Optional<FoundItem> lostItemOptional = foundItemRepository.findById(request.getId());
-            if (lostItemOptional.isPresent()) {
-                foundItemRepository.save(item);
+            Optional<FoundItem> item = foundItemRepository.findById(request.getId());
+            if (!item.isPresent()) {
+                foundItemRepository.save(mappedItem);
                 return "UPDATED";
             } else {
                 throw new EntityNotFoundException("LostItem with ID " + request.getId() + " not found");
@@ -78,7 +80,15 @@ public class FoundItemService {
         }
     }
 
+
+
+
     public FoundItem findById(Long id) {
         return foundItemRepository.findById(id).get();
     }
+
+    private boolean doesExists(Optional<FoundItem> item) {
+        return item.isPresent();
+    }
+
 }

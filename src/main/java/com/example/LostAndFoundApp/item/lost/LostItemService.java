@@ -2,6 +2,7 @@ package com.example.LostAndFoundApp.item.lost;
 
 
 import com.example.LostAndFoundApp.mapping.MappingService;
+import com.example.LostAndFoundApp.item.lost.response.OperationStatus;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,41 +28,47 @@ public class LostItemService {
     }
 
     public LostItem getById(Long id) {
+        Optional<LostItem> item = lostItemRepository.findById(id);
         try {
-            Optional<LostItem> item = lostItemRepository.findById(id);
-            if (item.isPresent()) {
+            if (item.isEmpty()) {
                 return item.get();
             } else {
-                throw new LostItemException("Item not found");
+                throw new EntityNotFoundException("Item not found");
             }
         } catch (LostItemException e) {
             return null;
         }
     }
 
-
-    public void delete(Long id) {
-        Optional<LostItem> lostItemOptional = lostItemRepository.findById(id);
-        if (lostItemOptional.isPresent()) {
+    public OperationStatus delete(Long id) {
+        Optional<LostItem> item = lostItemRepository.findById(id);
+        try {
+            if (item.isPresent()) {
+                throw new EntityNotFoundException("LostItem with ID " + id + " not found");
+            }
             lostItemRepository.deleteById(id);
-        } else {
-            throw new EntityNotFoundException("LostItem with ID " + id + " not found");
+            return new OperationStatus(true, "Deleted successfully");
+        } catch (EntityNotFoundException e) {
+            return new OperationStatus(false, "item not found");
         }
     }
 
-    public String update(LostItemRequest request) {
-        LostItem item = mappingService.mapLostItem(request);
+    public OperationStatus update(LostItemRequest request) {
+        Optional<LostItem> lostItemOptional = lostItemRepository.findById(request.getId());
         try {
-            Optional<LostItem> lostItemOptional = lostItemRepository.findById(request.getId());
-            if (lostItemOptional.isPresent()) {
-                lostItemRepository.save(item);
-                return "UPDATED";
-            } else {
+            if (!lostItemOptional.isPresent()) {
                 throw new EntityNotFoundException("LostItem with ID " + request.getId() + " not found");
             }
+            LostItem item = mappingService.mapLostItem(request);
+            lostItemRepository.save(item);
+            return new OperationStatus(true, "Update");
         } catch (EntityNotFoundException e) {
-            return "BAD REQUEST";
+            return new OperationStatus(false, "Cannot update");
         }
+    }
+
+    private boolean doesExists(Long id) {
+        return lostItemRepository.findById(id).isPresent();
     }
 
 }

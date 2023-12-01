@@ -34,6 +34,8 @@ public class MappingService {
     }
 
 
+
+
     public FoundItem mapFoundItem(FoundItemRequest request) {
         FoundItem item = new FoundItem();
         item.setCategory(request.getCategory());

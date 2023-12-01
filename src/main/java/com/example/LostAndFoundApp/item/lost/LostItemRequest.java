@@ -17,7 +17,6 @@ public class LostItemRequest {
 
     @NonNull
     private String email;
-
     @NonNull
     private Long id;
     @NonNull
@@ -37,5 +36,6 @@ public class LostItemRequest {
     @NonNull
     private Double longitude;
 
+    private String sveikinimas;
 
 }
