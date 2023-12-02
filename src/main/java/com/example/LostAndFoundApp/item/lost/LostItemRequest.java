@@ -2,15 +2,13 @@ package com.example.LostAndFoundApp.item.lost;
 
 import com.example.LostAndFoundApp.item.ItemCategory;
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class LostItemRequest {
