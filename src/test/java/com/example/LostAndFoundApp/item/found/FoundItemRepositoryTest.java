@@ -1,4 +1,4 @@
-package com.example.LostAndFoundApp.repository;
+package com.example.LostAndFoundApp.item.found;
 
 import com.example.LostAndFoundApp.config.TestConfig;
 import com.example.LostAndFoundApp.item.ItemCategory;
@@ -30,7 +30,6 @@ public class FoundItemRepositoryTest {
     @Autowired
     private UserRepository userRepository;
     private Coordinates coordinates;
-    private User user;
     private User savedUser;
     private FoundItem savedFoundItem;
 

@@ -1,4 +1,4 @@
-package com.example.LostAndFoundApp.repository;
+package com.example.LostAndFoundApp.item.lost;
 
 import com.example.LostAndFoundApp.config.TestConfig;
 import com.example.LostAndFoundApp.item.ItemCategory;
