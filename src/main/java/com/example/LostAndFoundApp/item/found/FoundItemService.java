@@ -136,4 +136,10 @@ public class FoundItemService {
             return 0L;
         }
     }
+
+    public List<FoundItem> getAllUserFoundItems(Long id) {
+        List<FoundItem> all = foundItemRepository.findByUser_Id(id);
+        return all;
+
+    }
 }

@@ -2,7 +2,6 @@ package com.example.LostAndFoundApp.item.lost;
 
 import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
 import com.example.LostAndFoundApp.item.lost.response.LostItemResponse;
-
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/lostItem")
 public class LostItemController {
-
     private final LostItemService lostItemService;
 
 
