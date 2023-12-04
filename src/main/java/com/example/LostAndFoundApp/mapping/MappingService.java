@@ -5,24 +5,22 @@ import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
 import com.example.LostAndFoundApp.item.found.FoundItem;
 import com.example.LostAndFoundApp.item.found.FoundItemRepository;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
-import com.example.LostAndFoundApp.item.lost.LostItem;
 import com.example.LostAndFoundApp.item.lost.LostItemRepository;
-import com.example.LostAndFoundApp.item.lost.LostItemRequest;
+import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
 import com.example.LostAndFoundApp.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Service
 public class MappingService {
 
     private final UserRepository userRepository;
-    private final CoordinatesRepository coordinatesRepository;
-    private final LostItemRepository lostItemRepository;
-    private final FoundItemRepository foundItemRepository;
 
-    public LostItem mapLostItem(LostItemRequest request) {
-        LostItem item = new LostItem();
+    public com.example.LostAndFoundApp.item.lost.LostItem mapLostItem(LostItemRequest request) {
+        com.example.LostAndFoundApp.item.lost.LostItem item = new com.example.LostAndFoundApp.item.lost.LostItem();
         item.setCategory(request.getCategory());
         item.setTitle(request.getTitle());
         item.setDescription(request.getDescription());
@@ -44,7 +42,8 @@ public class MappingService {
         item.setDateFound(request.getDateFound());
         item.setUser(userRepository.findByEmail(request.getEmail()).get());
         item.setDateFound(request.getDateFound());
-        item.setCoordinates(new Coordinates(request.getLatitude(), request.getLongitude()));
+        item.setCoordinates(request.getCoordinates());
+        item.setCreationTime(LocalDateTime.now());
         return item;
     }
 }

@@ -24,8 +24,22 @@ public class FoundItemService {
 
 
     public List<FoundItem> getAll() {
-        List<FoundItem> all = foundItemRepository.findAll();
         return foundItemRepository.findAll();
+
+    }
+
+
+    public FoundItemResponse getById(Long id) {
+        Optional<FoundItem> item = foundItemRepository.findById(id);
+        try {
+            if (!doesExists(item)) {
+                throw new EntityNotFoundException();
+            }
+            FoundItem itemById = item.get();
+            return new FoundItemResponse(true, itemById, "FOUND BY ID " + id);
+        } catch (EntityNotFoundException e) {
+            return new FoundItemResponse(false, "NOT FOUND");
+        }
     }
 
 
@@ -39,9 +53,9 @@ public class FoundItemService {
                 throw new EntityExistsException();
             }
             FoundItem mappedItem = mappingService.mapFoundItem(request);
-            coordinatesRepository.save(mappedItem.getCoordinates());
+            coordinatesRepository.save(request.getCoordinates());
             foundItemRepository.save(mappedItem);
-            return new FoundItemResponse("Created successfully");
+            return new FoundItemResponse(true, "Created successfully");
 
         } catch (EntityExistsException e) {
             return new FoundItemResponse("Item already exists");
@@ -50,24 +64,11 @@ public class FoundItemService {
     }
 
 
-    public FoundItemResponse getById(Long id) {
-        Optional<FoundItem> item = foundItemRepository.findById(id);
-        try {
-            if (!doesExists(item)) {
-                throw new EntityNotFoundException();
-            }
-            FoundItem itemById = item.get();
-            return new FoundItemResponse(itemById, "FOUND BY ID", true);
-        } catch (EntityNotFoundException e) {
-            return new FoundItemResponse(false, "NOT FOUND");
-        }
-    }
-
     public FoundItemResponse delete(Long id) {
         Optional<FoundItem> item = foundItemRepository.findById(id);
         try {
             if (!doesExists(item)) {
-                throw new EntityNotFoundException("LostItem with ID " + id + " not found");
+                throw new EntityNotFoundException("Founded item  with ID " + id + " not found");
             }
             foundItemRepository.deleteById(id);
             return new FoundItemResponse(true, "Deleted successfully");
@@ -77,29 +78,58 @@ public class FoundItemService {
     }
 
 
-    public String update(FoundItemRequest request) {
-        FoundItem mappedItem = mappingService.mapFoundItem(request);
-        try {
+    public FoundItemResponse update(FoundItemRequest request) {
+        Optional<FoundItem> item = foundItemRepository.findById(request.getId());
 
-            Optional<FoundItem> item = foundItemRepository.findById(request.getId());
-            if (!item.isPresent()) {
+        try {
+            if (doesExists(item)) {
+                FoundItem mappedItem = mappingService.mapFoundItem(request);
                 foundItemRepository.save(mappedItem);
-                return "UPDATED";
+                return new FoundItemResponse(true);
             } else {
-                throw new EntityNotFoundException("LostItem with ID " + request.getId() + " not found");
+                throw new EntityNotFoundException("Found item with ID " + request.getId() + " not found");
             }
         } catch (EntityNotFoundException e) {
-            return "BAD REQUEST";
+            return new FoundItemResponse(false, "Item to update not found");
         }
     }
 
-
-    public FoundItem findById(Long id) {
-        return foundItemRepository.findById(id).get();
-    }
 
     private boolean doesExists(Optional<FoundItem> item) {
         return item.isPresent();
     }
 
+
+    public FoundItem testFindById(Long id) {
+        return foundItemRepository.findById(id).get();
+    }
+
+    public FoundItemResponse getByCoordinates(FoundItemRequest request) {
+
+        try {
+            Double latitude = request.getCoordinates().getLatitude();
+            Double longitude = request.getCoordinates().getLongitude();
+            Long coordinatesId = getIdByCoordinates(latitude, longitude);
+            Optional<FoundItem> item = foundItemRepository.findByCoordinatesId(coordinatesId);
+            if (doesExists(item)) {
+                return new FoundItemResponse(true, item.get());
+            } else {
+                throw new EntityNotFoundException();
+            }
+        } catch (EntityNotFoundException e) {
+            return new FoundItemResponse(false, "Not found by coordinates");
+        }
+    }
+
+    private Long getIdByCoordinates(Double latitude, Double longitude) {
+        Optional<Long> idOptional = coordinatesRepository.findIdByLatitudeAndLongitude(latitude, longitude);
+        try {
+            if (!idOptional.isPresent()) {
+                throw new EntityNotFoundException();
+            }
+            return idOptional.get();
+        } catch (EntityNotFoundException e) {
+            return 0L;
+        }
+    }
 }

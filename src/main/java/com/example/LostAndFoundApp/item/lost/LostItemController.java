@@ -1,5 +1,7 @@
 package com.example.LostAndFoundApp.item.lost;
 
+import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
+import com.example.LostAndFoundApp.item.lost.response.LostItemResponse;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,40 +16,36 @@ import java.util.List;
 @RequestMapping("/api/lostItem")
 public class LostItemController {
 
-    private final LostItemService service;
+    private final LostItemService lostItemService;
 
 
-    @GetMapping("/getAll")
+    @GetMapping("/all")
     public ResponseEntity<List<LostItem>> getAll() {
-        List<LostItem> allLostItems = service.getAll();
-        return new ResponseEntity<>(allLostItems, HttpStatus.OK);
+        List<LostItem> all = lostItemService.getAll();
+        return new ResponseEntity<>(all, HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<LostItem> add(@RequestBody LostItemRequest lostItem) {
-        LostItem addedLostItem = service.add(lostItem);
-        return new ResponseEntity<>(addedLostItem, HttpStatus.CREATED);
+    public ResponseEntity<LostItemResponse> add(@RequestBody LostItemRequest request) {
+        LostItemResponse response = lostItemService.add(request);
+        return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.CREATED) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LostItem> getById(@PathVariable("id") Long id) {
-        LostItem lostItem = service.getById(id);
-        if (lostItem != null) {
-            return new ResponseEntity<>(lostItem, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<LostItemResponse> getById(@PathVariable("id") Long id) {
+        LostItemResponse response = lostItemService.getById(id);
+        return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<LostItem> update(@RequestBody LostItemRequest lostItem) {
-        service.update(lostItem);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<LostItemResponse> update(@RequestBody LostItemRequest request) {
+        LostItemResponse response = lostItemService.update(request);
+        return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/delete/{id}")
-    public ResponseEntity<LostItem> delete(@PathVariable("id") Long id) {
-        service.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<LostItemResponse> delete(@PathVariable("id") Long id) {
+        LostItemResponse response = lostItemService.delete(id);
+        return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

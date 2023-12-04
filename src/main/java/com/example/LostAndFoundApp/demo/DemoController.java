@@ -3,6 +3,7 @@ package com.example.LostAndFoundApp.demo;
 import com.example.LostAndFoundApp.item.found.FoundItem;
 import com.example.LostAndFoundApp.item.found.FoundItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,14 +27,14 @@ public class DemoController {
 
     @GetMapping("/all")
     public ResponseEntity<List<FoundItem>> getAll() {
-        List<FoundItem> all = foundItemService.getAll();
-        return ResponseEntity.ok(all);
+        List<FoundItem> response = foundItemService.getAll();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
     @GetMapping("/byId")
     public ResponseEntity<FoundItem> getById(@RequestParam("itemId") Long id) {
-        return ResponseEntity.ok(foundItemService.findById(id));
+        return ResponseEntity.ok(foundItemService.testFindById(id));
     }
 }
 

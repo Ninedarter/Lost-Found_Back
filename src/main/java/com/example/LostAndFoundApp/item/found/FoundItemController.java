@@ -18,40 +18,40 @@ public class FoundItemController {
 
     private final FoundItemService foundItemService;
 
-
-    @GetMapping("/getAll")
+    @GetMapping("/all")
     public ResponseEntity<List<FoundItem>> getAll() {
-        List<FoundItem> allFoundItems = foundItemService.getAll();
-        return new ResponseEntity<>(allFoundItems, HttpStatus.OK);
+        List<FoundItem> all = foundItemService.getAll();
+        return new ResponseEntity<>(all, HttpStatus.OK);
     }
 
-
     @PostMapping("/add")
-    public ResponseEntity<FoundItemResponse> add(@RequestBody FoundItemRequest foundItem) {
-        System.out.println(foundItem);
-        FoundItemResponse result = foundItemService.add(foundItem);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    public ResponseEntity<FoundItemResponse> add(@RequestBody FoundItemRequest request) {
+        FoundItemResponse response = foundItemService.add(request);
+        return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.CREATED) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<FoundItemResponse> getById(@PathVariable("id") Long id) {
-        FoundItemResponse result = foundItemService.getById(id);
-        if (!result.isSuccess()) {
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        }
+        FoundItemResponse response = foundItemService.getById(id);
+        return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<FoundItemResponse> update(@RequestBody FoundItemRequest foundItem) {
-        foundItemService.update(foundItem);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<FoundItemResponse> update(@RequestBody FoundItemRequest request) {
+        FoundItemResponse response = foundItemService.update(request);
+        return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/delete/{id}")
-    public ResponseEntity<FoundItem> delete(@PathVariable("id") Long id) {
-        foundItemService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<FoundItemResponse> delete(@PathVariable("id") Long id) {
+        FoundItemResponse response = foundItemService.delete(id);
+        return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/coordinates")
+    public ResponseEntity<FoundItemResponse> getByCoordinates(@RequestBody FoundItemRequest request) {
+        FoundItemResponse response = foundItemService.getByCoordinates(request);
+        return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+
     }
 }
