@@ -8,6 +8,8 @@ import com.example.LostAndFoundApp.mapping.MappingService;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,7 @@ public class FoundItemService {
     private final FoundItemRepository foundItemRepository;
     private final CoordinatesRepository coordinatesRepository;
     private final MappingService mappingService;
+    private static final Logger logger = LogManager.getLogger(FoundItemService.class);
 
 
     public List<FoundItem> getAll() {
@@ -112,6 +115,7 @@ public class FoundItemService {
             Long coordinatesId = getIdByCoordinates(latitude, longitude);
             Optional<FoundItem> item = foundItemRepository.findByCoordinatesId(coordinatesId);
             if (doesExists(item)) {
+                logger.info("Received item by coordinates");
                 return new FoundItemResponse(true, item.get());
             } else {
                 throw new EntityNotFoundException();
