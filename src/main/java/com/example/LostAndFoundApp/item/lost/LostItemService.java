@@ -1,7 +1,7 @@
 package com.example.LostAndFoundApp.item.lost;
 
 import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
-import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
+
 import com.example.LostAndFoundApp.item.lost.response.LostItemResponse;
 import com.example.LostAndFoundApp.mapping.MappingService;
 import jakarta.persistence.EntityExistsException;
@@ -40,7 +40,7 @@ public class LostItemService {
     }
 
 
-    public LostItemResponse add(LostItemRequest request) {
+    public LostItemResponse add(com.example.LostAndFoundApp.item.lost.LostItemRequest request) {
         if (request.getId() == null) {
             request.setId(0L);
         }
@@ -75,7 +75,7 @@ public class LostItemService {
     }
 
 
-    public LostItemResponse update(LostItemRequest request) {
+    public LostItemResponse update(com.example.LostAndFoundApp.item.lost.LostItemRequest request) {
         Optional<LostItem> item = lostItemRepository.findById(request.getId());
 
         try {
