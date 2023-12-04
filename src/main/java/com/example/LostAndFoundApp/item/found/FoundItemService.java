@@ -138,9 +138,30 @@ public class FoundItemService {
     }
 
     public List<FoundItem> getAllUserFoundItems(String email) {
-        List<FoundItem> all  = foundItemRepository.findByUser_Email(email);
+        List<FoundItem> all = foundItemRepository.findByUser_Email(email);
 
         return all;
 
+    }
+
+
+    public FoundItemResponse updateUserFoundedItem(FoundItemRequest request) {
+
+        List<FoundItem> foundedItems = foundItemRepository.findByUser_Email(request.getEmail());
+        FoundItem mappedItem = mappingService.mapFoundItem(request);
+        try {
+            for (FoundItem foundedItem : foundedItems) {
+                if (foundedItem.getId() == mappedItem.getId()) {
+                    coordinatesRepository.save(request.getCoordinates());
+                    foundItemRepository.save(mappedItem);
+                    return new FoundItemResponse(true, "Updated successfully");
+                } else {
+                    throw new EntityNotFoundException("Found item with ID " + request.getId() + " not found");
+                }
+            }
+        } catch (EntityNotFoundException e) {
+            return new FoundItemResponse(false, "Item to update not found");
+        }
+        return new FoundItemResponse(false, "Item to update not found");
     }
 }

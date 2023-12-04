@@ -30,10 +30,11 @@ public class MappingService {
     }
 
 
-
-
     public FoundItem mapFoundItem(FoundItemRequest request) {
+
         FoundItem item = new FoundItem();
+        //added id field
+        item.setId(request.getId());
         item.setCategory(request.getCategory());
         item.setTitle(request.getTitle());
         item.setDescription(request.getDescription());

@@ -59,5 +59,11 @@ public class FoundItemController {
         return foundItemService.getAllUserFoundItems(request.getEmail());
     }
 
+    @PutMapping("/user/update")
+    public ResponseEntity<FoundItemResponse> updateUserFoundItem(@RequestBody FoundItemRequest request) {
+        FoundItemResponse response = foundItemService.updateUserFoundedItem(request);
+        return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 
 }
