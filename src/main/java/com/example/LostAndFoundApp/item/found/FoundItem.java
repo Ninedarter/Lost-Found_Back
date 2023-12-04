@@ -12,6 +12,8 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static jakarta.persistence.CascadeType.ALL;
+
 @Data
 @Builder
 @Entity
@@ -47,7 +49,7 @@ public class FoundItem implements Item {
     private User user;
 
 
-    @OneToOne
+    @OneToOne(cascade = ALL)
     @JoinColumn(name = "coordinates_id")
     @JsonIgnore
     private Coordinates coordinates;
