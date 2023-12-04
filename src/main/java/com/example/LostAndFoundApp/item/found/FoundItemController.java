@@ -35,7 +35,6 @@ public class FoundItemController {
         FoundItemResponse response = foundItemService.getById(id);
         return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
-
     @PutMapping("/update")
     public ResponseEntity<FoundItemResponse> update(@RequestBody FoundItemRequest request) {
         FoundItemResponse response = foundItemService.update(request);
@@ -52,6 +51,5 @@ public class FoundItemController {
     public ResponseEntity<FoundItemResponse> getByCoordinates(@RequestBody FoundItemRequest request) {
         FoundItemResponse response = foundItemService.getByCoordinates(request);
         return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-
     }
 }
