@@ -1,11 +1,10 @@
 package com.example.LostAndFoundApp.mapping;
 
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
-import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
 import com.example.LostAndFoundApp.item.found.FoundItem;
-import com.example.LostAndFoundApp.item.found.FoundItemRepository;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
-import com.example.LostAndFoundApp.item.lost.LostItemRepository;
+
+
 import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
 import com.example.LostAndFoundApp.user.UserRepository;
 import lombok.RequiredArgsConstructor;
