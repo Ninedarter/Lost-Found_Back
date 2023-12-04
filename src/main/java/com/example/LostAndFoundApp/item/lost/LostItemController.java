@@ -1,5 +1,6 @@
 package com.example.LostAndFoundApp.item.lost;
 
+import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
 import com.example.LostAndFoundApp.item.lost.response.LostItemResponse;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -26,7 +27,7 @@ public class LostItemController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<LostItemResponse> add(@RequestBody com.example.LostAndFoundApp.item.lost.LostItemRequest request) {
+    public ResponseEntity<LostItemResponse> add(@RequestBody LostItemRequest request) {
         LostItemResponse response = lostItemService.add(request);
         return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.CREATED) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
@@ -38,7 +39,7 @@ public class LostItemController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<LostItemResponse> update(@RequestBody com.example.LostAndFoundApp.item.lost.LostItemRequest request) {
+    public ResponseEntity<LostItemResponse> update(@RequestBody LostItemRequest request) {
         LostItemResponse response = lostItemService.update(request);
         return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }

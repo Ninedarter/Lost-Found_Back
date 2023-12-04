@@ -1,4 +1,4 @@
-package com.example.LostAndFoundApp.item.lost;
+package com.example.LostAndFoundApp.item.lost.request;
 
 import com.example.LostAndFoundApp.item.ItemCategory;
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;

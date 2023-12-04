@@ -3,9 +3,8 @@ package com.example.LostAndFoundApp.mapping;
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.item.found.FoundItem;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
-
-
-import com.example.LostAndFoundApp.item.lost.LostItemRequest;
+import com.example.LostAndFoundApp.item.lost.LostItem;
+import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
 import com.example.LostAndFoundApp.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ public class MappingService {
 
     private final UserRepository userRepository;
 
-    public com.example.LostAndFoundApp.item.lost.LostItem mapLostItem(LostItemRequest request) {
+    public LostItem mapLostItem(LostItemRequest request) {
         com.example.LostAndFoundApp.item.lost.LostItem item = new com.example.LostAndFoundApp.item.lost.LostItem();
         item.setCategory(request.getCategory());
         item.setTitle(request.getTitle());
