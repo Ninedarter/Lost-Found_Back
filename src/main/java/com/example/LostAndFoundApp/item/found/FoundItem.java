@@ -49,7 +49,7 @@ public class FoundItem implements Item {
     private User user;
 
 
-    @OneToOne(cascade = ALL)
+    @OneToOne
     @JoinColumn(name = "coordinates_id")
     @JsonIgnore
     private Coordinates coordinates;
