@@ -13,7 +13,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/lostItem")
+@RequestMapping("/api/v1/lostItem")
 public class LostItemController {
 
     private final LostItemService lostItemService;
