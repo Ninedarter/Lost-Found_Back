@@ -137,8 +137,9 @@ public class FoundItemService {
         }
     }
 
-    public List<FoundItem> getAllUserFoundItems(Long id) {
-        List<FoundItem> all = foundItemRepository.findByUser_Id(id);
+    public List<FoundItem> getAllUserFoundItems(String email) {
+        List<FoundItem> all  = foundItemRepository.findByUser_Email(email);
+
         return all;
 
     }

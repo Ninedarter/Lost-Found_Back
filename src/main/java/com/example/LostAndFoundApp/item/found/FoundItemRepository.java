@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface FoundItemRepository extends JpaRepository<FoundItem, Long> {
+    List<FoundItem> findByUser_Email(String email);
 
     List<FoundItem> findByUser_Id(Long id);
 

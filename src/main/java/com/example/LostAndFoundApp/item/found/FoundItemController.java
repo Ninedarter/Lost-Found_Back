@@ -54,8 +54,10 @@ public class FoundItemController {
         return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/user/{id}")
-    public List<FoundItem> getByUserId(@PathVariable("id") Long id) {
-        return foundItemService.getAllUserFoundItems(id);
+    @GetMapping("/user")
+    public List<FoundItem> getByUserId(@RequestBody FoundItemRequest request) {
+        return foundItemService.getAllUserFoundItems(request.getEmail());
     }
+
+
 }
