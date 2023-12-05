@@ -53,7 +53,6 @@ public class LostItemController {
     @GetMapping("/user/item")
     public ResponseEntity<List<LostItem>> getByUserId(@RequestBody LostItemRequest request) {
         List<LostItem> tems = lostItemService.getAllUserFoundItems(request.getEmail());
-        String valid;
         return new ResponseEntity<>(tems, HttpStatus.OK);
     }
 
