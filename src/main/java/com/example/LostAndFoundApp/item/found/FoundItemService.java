@@ -124,7 +124,7 @@ public class FoundItemService {
         }
     }
 
-    private Long getIdByCoordinates(Double latitude, Double longitude) {
+    Long getIdByCoordinates(Double latitude, Double longitude) {
         Optional<Long> idOptional = coordinatesRepository.findIdByLatitudeAndLongitude(latitude, longitude);
         try {
             if (!idOptional.isPresent()) {
@@ -184,7 +184,7 @@ public class FoundItemService {
         }
     }
 
-    private boolean isUserProperty(FoundItemRequest request) {
+    boolean isUserProperty(FoundItemRequest request) {
         Optional<FoundItem> byIdAndUserEmail = foundItemRepository.findByIdAndUserEmail(request.getId(), request.getEmail());
         if (!doesExists(byIdAndUserEmail)) {
             throw new EntityNotFoundException("Not found");
@@ -192,7 +192,7 @@ public class FoundItemService {
         return true;
     }
 
-    private void checkDeleteRequest(FoundItemRequest request) {
+    void checkDeleteRequest(FoundItemRequest request) {
         if (request.getId() == null) {
             throw new EntityNotFoundException("Not found or item don't belong to user");
         }
