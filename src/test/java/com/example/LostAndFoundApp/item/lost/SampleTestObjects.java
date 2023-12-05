@@ -2,6 +2,7 @@ package com.example.LostAndFoundApp.item.lost;
 
 import com.example.LostAndFoundApp.item.ItemCategory;
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
+import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
 import com.example.LostAndFoundApp.user.Gender;
 import com.example.LostAndFoundApp.user.Role;
 import com.example.LostAndFoundApp.user.User;

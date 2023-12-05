@@ -54,14 +54,23 @@ public class FoundItemController {
         return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/user")
+
+    // Only user items CRUD
+
+    @GetMapping("/user/item")
     public List<FoundItem> getByUserId(@RequestBody FoundItemRequest request) {
         return foundItemService.getAllUserFoundItems(request.getEmail());
     }
 
-    @PutMapping("/user/update")
+    @PutMapping("/user/updateItem")
     public ResponseEntity<FoundItemResponse> updateUserFoundItem(@RequestBody FoundItemRequest request) {
-        FoundItemResponse response = foundItemService.updateUserFoundedItem(request);
+        FoundItemResponse response = foundItemService.updateUserFoundItem(request);
+        return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("/user/deleteItem")
+    public ResponseEntity<FoundItemResponse> delete(@RequestBody FoundItemRequest request) {
+        FoundItemResponse response = foundItemService.deleteUserFoundItem(request);
         return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

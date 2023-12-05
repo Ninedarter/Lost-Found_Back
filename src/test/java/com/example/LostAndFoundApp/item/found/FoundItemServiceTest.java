@@ -115,7 +115,7 @@ public class FoundItemServiceTest {
 
         FoundItemResponse response = foundItemService.getById(existingFoundItemID);
 
-        Assertions.assertEquals("FOUND BY ID", response.getMessage());
+        Assertions.assertEquals("FOUND BY ID 1", response.getMessage());
         Assertions.assertEquals(foundItem1, response.getItem());
     }
 

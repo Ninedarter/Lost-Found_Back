@@ -102,7 +102,6 @@ public class FoundItemService {
         return item.isPresent();
     }
 
-
     public FoundItem testFindById(Long id) {
         return foundItemRepository.findById(id).get();
     }
@@ -137,31 +136,71 @@ public class FoundItemService {
         }
     }
 
+
+
+
+
+    //    User items CRUD
     public List<FoundItem> getAllUserFoundItems(String email) {
         List<FoundItem> all = foundItemRepository.findByUser_Email(email);
-
         return all;
-
     }
 
-
-    public FoundItemResponse updateUserFoundedItem(FoundItemRequest request) {
+    public FoundItemResponse updateUserFoundItem(FoundItemRequest request) {
 
         List<FoundItem> foundedItems = foundItemRepository.findByUser_Email(request.getEmail());
         FoundItem mappedItem = mappingService.mapFoundItem(request);
         try {
+            boolean doesBelongToUser = false;
             for (FoundItem foundedItem : foundedItems) {
                 if (foundedItem.getId() == mappedItem.getId()) {
-                    coordinatesRepository.save(request.getCoordinates());
-                    foundItemRepository.save(mappedItem);
-                    return new FoundItemResponse(true, "Updated successfully");
-                } else {
-                    throw new EntityNotFoundException("Found item with ID " + request.getId() + " not found");
+                    doesBelongToUser = true;
+                    break;
                 }
             }
+            if (!doesBelongToUser) {
+                return new FoundItemResponse(false, "Item to update does not belongs to the user");
+            } else {
+                coordinatesRepository.save(request.getCoordinates());
+                foundItemRepository.save(mappedItem);
+                return new FoundItemResponse(true, "Updated successfully");
+            }
+
         } catch (EntityNotFoundException e) {
-            return new FoundItemResponse(false, "Item to update not found");
+            new FoundItemResponse(false, "Item to update does not belongs to the user");
+
         }
-        return new FoundItemResponse(false, "Item to update not found");
+        return new FoundItemResponse(true, "Updated successfully");
     }
+
+    public FoundItemResponse deleteUserFoundItem(FoundItemRequest request) {
+
+        try {
+            checkDeleteRequest(request);
+            if (isUserProperty(request)) {
+                foundItemRepository.deleteById(request.getId());
+                return new FoundItemResponse(true, "Deleted successfully");
+            } else {
+                return new FoundItemResponse("Item not belonging to this user");
+            }
+        } catch (EntityNotFoundException e) {
+            return new FoundItemResponse(false, "Not found");
+        }
+    }
+
+    private boolean isUserProperty(FoundItemRequest request) {
+        Optional<FoundItem> byIdAndUserEmail = foundItemRepository.findByIdAndUserEmail(request.getId(), request.getEmail());
+        if (!doesExists(byIdAndUserEmail)) {
+            throw new EntityNotFoundException("Not found");
+        }
+        return true;
+    }
+
+    private void checkDeleteRequest(FoundItemRequest request) {
+        if (request.getId() == null) {
+            throw new EntityNotFoundException("Not found or item don't belong to user");
+        }
+    }
+
+
 }
