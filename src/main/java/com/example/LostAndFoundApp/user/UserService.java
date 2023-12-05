@@ -1,11 +1,15 @@
 package com.example.LostAndFoundApp.user;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,5 +35,19 @@ public class UserService {
 
         // save the new password
         repository.save(user);
+    }
+
+    public ResponseEntity<User> getById(Long id) {
+        Optional<User> u = repository.findById(id);
+
+        try {
+            if (u.isEmpty()) {
+                throw new EntityNotFoundException();
+            }
+
+            return new ResponseEntity<>(u.get(), HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(new User(), HttpStatus.NOT_FOUND);
+        }
     }
 }

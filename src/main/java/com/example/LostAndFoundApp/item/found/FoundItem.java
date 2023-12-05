@@ -4,15 +4,12 @@ import com.example.LostAndFoundApp.item.Item;
 import com.example.LostAndFoundApp.item.ItemCategory;
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.user.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-import static jakarta.persistence.CascadeType.ALL;
 
 @Data
 @Builder
@@ -41,17 +38,13 @@ public class FoundItem implements Item {
     @NonNull
     private LocalDateTime creationTime;
 
-
-    @NonNull
     @ManyToOne
     @JoinColumn(name = "finder_id")
-    @JsonIgnore
     private User user;
 
 
     @OneToOne
     @JoinColumn(name = "coordinates_id")
-    @JsonIgnore
     private Coordinates coordinates;
 
 
