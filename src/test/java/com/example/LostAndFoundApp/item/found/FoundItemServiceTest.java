@@ -161,24 +161,33 @@ public class FoundItemServiceTest {
         Assertions.assertEquals("Not found", response.getMessage());
     }
 
-//    @Test
-//    @DisplayName("Update existing item - verify correct response")
-//    public void updateExistingItem() {
-//
-//        FoundItemRequest request = SampleTestObjects.createFoundItemRequest();
-//        FoundItem mappedItem = SampleTestObjects.createFoundItem(user, coordinates);
-//
-//        when(mappingService.mapFoundItem(request)).thenReturn(mappedItem);
-//
-//        when(foundItemRepository.findById(request.getId())).thenReturn(Optional.of(foundItem1));
-//
-//        String response = foundItemService.update(request);
-//
-//        Assertions.assertEquals("UPDATED", response);
-//
-//        ArgumentCaptor<FoundItem> foundItemCaptor = ArgumentCaptor.forClass(FoundItem.class);
-//        verify(foundItemRepository).save(foundItemCaptor.capture());
-//    }
+    @Test
+    @DisplayName("Update existing item - verify correct response")
+    public void updateExistingItem() {
+
+        FoundItemRequest request = SampleTestObjects.createFoundItemRequest();
+        FoundItem mappedItem = SampleTestObjects.createFoundItem(user, coordinates);
+
+        when(mappingService.mapFoundItem(request)).thenReturn(mappedItem);
+        when(foundItemRepository.findById(request.getId())).thenReturn(Optional.of(foundItem1));
+
+        FoundItemResponse response = foundItemService.update(request);
+
+        Assertions.assertTrue(response.isSuccess());
+        Assertions.assertNull(response.getMessage());
+
+        // Verify that save was called with the correct argument
+        ArgumentCaptor<FoundItem> foundItemCaptor = ArgumentCaptor.forClass(FoundItem.class);
+        verify(foundItemRepository).save(foundItemCaptor.capture());
+
+        // Assert the saved item
+        FoundItem savedItem = foundItemCaptor.getValue();
+        Assertions.assertEquals(mappedItem.getId(), savedItem.getId());
+
+        // Verify that findById was called with the correct ID
+        verify(foundItemRepository).findById(request.getId());
+
+    }
 }
 
 

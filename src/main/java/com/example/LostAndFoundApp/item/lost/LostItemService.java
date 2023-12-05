@@ -33,7 +33,7 @@ public class LostItemService {
                 throw new EntityNotFoundException();
             }
             LostItem itemById = item.get();
-            return new LostItemResponse(true, itemById, "FOUND BY ID" + id);
+            return new LostItemResponse(true, itemById, "FOUND BY ID " + id);
         } catch (EntityNotFoundException e) {
             return new LostItemResponse(false, "NOT FOUND");
         }
@@ -101,4 +101,83 @@ public class LostItemService {
         return lostItemRepository.findById(id).get();
     }
 
+
+    //    User items CRUD
+    public List<LostItem> getAllUserFoundItems(String email) {
+        List<LostItem> items = lostItemRepository.findByUser_Email(email);
+        return items;
+    }
+
+
+    public LostItemResponse updateUserLostItem(LostItemRequest request) {
+
+        List<LostItem> lostItems = lostItemRepository.findByUser_Email(request.getEmail());
+
+        LostItem mappedItem = mappingService.mapLostItem(request);
+        try {
+            boolean doesBelongToUser = false;
+            for (LostItem item : lostItems) {
+                if (item.getId() == mappedItem.getId()) {
+                    doesBelongToUser = true;
+                    break;
+                }
+            }
+            if (!doesBelongToUser) {
+                return new LostItemResponse(false, "Item to update does not belongs to the user");
+            } else {
+
+                request.getCoordinates().setId(request.getId());
+                request.setCoordinates(mappedItem.getCoordinates());
+                coordinatesRepository.save(request.getCoordinates());
+                lostItemRepository.save(mappedItem);
+                return new LostItemResponse(true, "Updated successfully");
+            }
+        } catch (EntityNotFoundException e) {
+            new LostItemResponse(false, "Item to update does not belongs to the user");
+
+        }
+        return new LostItemResponse(false, "Cannot update item");
+    }
+
+
+    public LostItemResponse deleteUserFoundItem(LostItemRequest request) {
+        try {
+            checkDeleteRequest(request);
+            if (isUserProperty(request)) {
+                lostItemRepository.deleteById(request.getId());
+                return new LostItemResponse(true, "Deleted successfully");
+            } else {
+                return new LostItemResponse(false, "Item not belonging to this user");
+            }
+        } catch (EntityNotFoundException e) {
+            return new LostItemResponse(false, "Not found");
+        }
+    }
+
+
+    private boolean isUserProperty(LostItemRequest request) {
+        Optional<LostItem> byIdAndUserEmail = lostItemRepository.findByIdAndUserEmail(request.getId(), request.getEmail());
+        if (!doesExists(byIdAndUserEmail)) {
+            throw new EntityNotFoundException("Not found");
+        }
+        return true;
+    }
+
+    private void checkDeleteRequest(LostItemRequest request) {
+        if (request.getId() == null) {
+            throw new EntityNotFoundException("Not found or item don't belong to user");
+        }
+    }
+
+//    private Long getIdByCoordinates(Double latitude, Double longitude) {
+//        Optional<Long> idOptional = coordinatesRepository.findIdByLatitudeAndLongitude(latitude, longitude);
+//        try {
+//            if (!idOptional.isPresent()) {
+//                throw new EntityNotFoundException();
+//            }
+//            return idOptional.get();
+//        } catch (EntityNotFoundException e) {
+//            return 0L;
+//        }
+//    }
 }
