@@ -137,13 +137,9 @@ public class FoundItemService {
     }
 
 
-
-
-
     //    User items CRUD
     public List<FoundItem> getAllUserFoundItems(String email) {
-        List<FoundItem> all = foundItemRepository.findByUser_Email(email);
-        return all;
+        return foundItemRepository.findByUser_Email(email);
     }
 
     public FoundItemResponse updateUserFoundItem(FoundItemRequest request) {
