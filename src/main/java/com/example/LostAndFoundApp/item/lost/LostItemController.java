@@ -1,5 +1,6 @@
 package com.example.LostAndFoundApp.item.lost;
 
+import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
 import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
 import com.example.LostAndFoundApp.item.lost.response.LostItemResponse;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -47,4 +48,14 @@ public class LostItemController {
         LostItemResponse response = lostItemService.delete(id);
         return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+
+    // Only user items CRUD
+
+    @GetMapping("/user/item")
+    public List<LostItem> getByUserId(@RequestBody LostItemRequest request) {
+        return lostItemService.getAllUserFoundItems(request.getEmail());
+    }
+
+
 }

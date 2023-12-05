@@ -1,7 +1,8 @@
 package com.example.LostAndFoundApp.item.lost;
 
 import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
-
+import com.example.LostAndFoundApp.item.found.FoundItem;
+import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
 import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
 import com.example.LostAndFoundApp.item.lost.response.LostItemResponse;
 import com.example.LostAndFoundApp.mapping.MappingService;
@@ -98,8 +99,17 @@ public class LostItemService {
     }
 
 
+
+
     public LostItem testFindById(Long id) {
         return lostItemRepository.findById(id).get();
     }
+
+
+    //    User items CRUD
+    public List<LostItem> getAllUserFoundItems(String email) {
+        return lostItemRepository.findByUser_Email(email);
+    }
+
 
 }

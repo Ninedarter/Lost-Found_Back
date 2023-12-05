@@ -15,4 +15,6 @@ public interface FoundItemRepository extends JpaRepository<FoundItem, Long> {
 
     Optional<FoundItem> findByCoordinatesId(Long coordinatesId);
 
+
+    Optional<FoundItem> findByIdAndUserEmail(Long itemId, String email);
 }
