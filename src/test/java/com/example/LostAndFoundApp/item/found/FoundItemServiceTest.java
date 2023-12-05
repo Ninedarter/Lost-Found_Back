@@ -5,8 +5,11 @@ import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
 import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
 import com.example.LostAndFoundApp.mapping.MappingService;
+import com.example.LostAndFoundApp.user.Gender;
+import com.example.LostAndFoundApp.user.Role;
 import com.example.LostAndFoundApp.user.User;
 import com.example.LostAndFoundApp.user.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,10 +20,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -106,8 +112,20 @@ public class FoundItemServiceTest {
     }
 
     @Test
+    @DisplayName("Set ID to 0 if null")
+    public void setIdToZeroIfNull() {
+        FoundItemRequest request = new FoundItemRequest();
+        request.setId(null);
+
+        foundItemService.add(request);
+
+        Assertions.assertEquals(0L, request.getId());
+    }
+
+    @Test
     @DisplayName("Get Found Item by ID - Item Found")
     public void findExistingItemById() {
+        foundItem1.setId(1L);
         long existingFoundItemID = foundItem1.getId();
         Optional<FoundItem> optionalFoundItem = Optional.of(foundItem1);
 
@@ -187,6 +205,207 @@ public class FoundItemServiceTest {
         // Verify that findById was called with the correct ID
         verify(foundItemRepository).findById(request.getId());
 
+    }
+
+    @Test
+    @DisplayName("Update non existing item - verify exception")
+    public void updateNonExistingItem() {
+
+        FoundItemRequest request = SampleTestObjects.createFoundItemRequest();
+
+        when(foundItemRepository.findById(request.getId())).thenReturn(Optional.empty());
+
+        FoundItemResponse exception = foundItemService.update(request);
+
+        Assertions.assertEquals("Item to update not found", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Get item by coordinates - item found")
+    public void getItemByCoordinatesSuccess() {
+        FoundItemRequest request = SampleTestObjects.createFoundItemRequest();
+
+        // Assume that there is an item with the given coordinates
+        when(foundItemRepository.findByCoordinatesId(anyLong())).thenReturn(Optional.of(foundItem1));
+
+        FoundItemResponse response = foundItemService.getByCoordinates(request);
+
+        Assertions.assertTrue(response.isSuccess());
+        Assertions.assertNull(response.getMessage());
+        Assertions.assertEquals(foundItem1, response.getItem());
+    }
+
+    @Test
+    @DisplayName("Get item by coordinates - item not found")
+    public void getItemByCoordinatesNotFound() {
+        FoundItemRequest request = SampleTestObjects.createFoundItemRequest();
+
+        // Assume that there is no item with the given coordinates
+        when(foundItemRepository.findByCoordinatesId(anyLong())).thenReturn(Optional.empty());
+
+        FoundItemResponse response = foundItemService.getByCoordinates(request);
+
+        Assertions.assertFalse(response.isSuccess());
+        Assertions.assertEquals("Not found by coordinates", response.getMessage());
+        Assertions.assertNull(response.getItem());
+    }
+
+    @Test
+    @DisplayName("Get ID by coordinates - ID found")
+    public void getIdByCoordinatesSuccess() {
+        Double latitude = 40.7128;
+        Double longitude = -74.0060;
+
+        when(coordinatesRepository.findIdByLatitudeAndLongitude(latitude, longitude)).thenReturn(Optional.of(1L));
+
+        Long result = foundItemService.getIdByCoordinates(latitude, longitude);
+
+        Assertions.assertEquals(1L, result);
+    }
+
+    @Test
+    @DisplayName("Get ID by coordinates - ID not found")
+    public void getIdByCoordinatesNotFound() {
+        Double latitude = 40.7128;
+        Double longitude = -74.0060;
+
+        when(coordinatesRepository.findIdByLatitudeAndLongitude(latitude, longitude)).thenReturn(Optional.empty());
+
+        Long result = foundItemService.getIdByCoordinates(latitude, longitude);
+
+        Assertions.assertEquals(0L, result);
+    }
+
+    @Test
+    @DisplayName("Get all user found items for existing user")
+    public void getAllUserFoundItemsSuccess() {
+        String email = user.getEmail();
+
+        when(foundItemRepository.findByUser_Email(email)).thenReturn(Collections.emptyList());
+
+        List<FoundItem> foundItems = foundItemService.getAllUserFoundItems(email);
+
+        verify(foundItemRepository, times(1)).findByUser_Email(email);
+        Assertions.assertNotNull(foundItems);
+        Assertions.assertEquals(0, foundItems.size());
+    }
+
+    @Test
+    @DisplayName("Update existing user found item")
+    public void updateUserFoundItemSuccess() {
+        FoundItemRequest request = SampleTestObjects.createFoundItemRequest();
+        List<FoundItem> foundItems = Arrays.asList(SampleTestObjects.createFoundItem(user, coordinates));
+
+        when(foundItemRepository.findByUser_Email(anyString())).thenReturn(foundItems);
+        when(mappingService.mapFoundItem(any())).thenReturn(foundItem1);
+
+        FoundItemResponse response = foundItemService.updateUserFoundItem(request);
+
+        Assertions.assertEquals("Updated successfully", response.getMessage());
+
+    }
+
+    @Test
+    @DisplayName("Update existing found item which does not belong to the user")
+    public void updateUserFoundItemDoesNotBelong() {
+        FoundItemRequest request = SampleTestObjects.createFoundItemRequest();
+
+        foundItem1.setId(1L);
+        foundItem2.setId(2L);
+
+        List<FoundItem> foundItems = SampleTestObjects.createFoundItemsWithDifferentUsers();
+
+        when(foundItemRepository.findByUser_Email(anyString())).thenReturn(foundItems);
+        when(mappingService.mapFoundItem(any())).thenReturn(foundItem1);
+
+        FoundItemResponse response = foundItemService.updateUserFoundItem(request);
+
+        Assertions.assertEquals("Item to update does not belongs to the user", response.getMessage());
+
+    }
+
+    @Test
+    @DisplayName("Delete user found item - Success")
+    public void deleteUserFoundItemSuccess() {
+        FoundItemRequest request = SampleTestObjects.createFoundItemRequest();
+
+        when(foundItemRepository.findByIdAndUserEmail(request.getId(), request.getEmail()))
+                .thenReturn(Optional.of(SampleTestObjects.createFoundItem(user, coordinates)));
+
+        FoundItemResponse response = foundItemService.deleteUserFoundItem(request);
+
+        Assertions.assertTrue(response.isSuccess());
+        Assertions.assertEquals("Deleted successfully", response.getMessage());
+
+        verify(foundItemRepository, times(1)).deleteById(request.getId());
+    }
+
+
+    @Test
+    @DisplayName("Delete user found item - Item not found")
+    public void deleteUserFoundItemNotFound() {
+        FoundItemRequest request = SampleTestObjects.createFoundItemRequest();
+
+        FoundItemResponse response = foundItemService.deleteUserFoundItem(request);
+
+        Assertions.assertFalse(response.isSuccess());
+        Assertions.assertEquals("Not found", response.getMessage());
+
+        verify(foundItemRepository, never()).deleteById(any());
+    }
+
+    @Test
+    @DisplayName("Delete user found item - EntityNotFoundException occurs during isUserProperty")
+    public void deleteUserFoundItemEntityNotFoundExceptionInIsUserProperty() {
+        FoundItemRequest request = SampleTestObjects.createFoundItemRequest();
+
+        when(foundItemRepository.findByIdAndUserEmail(request.getId(), request.getEmail()))
+                .thenThrow(EntityNotFoundException.class);
+
+        FoundItemResponse response = foundItemService.deleteUserFoundItem(request);
+
+        Assertions.assertFalse(response.isSuccess());
+        Assertions.assertEquals("Not found", response.getMessage());
+
+        verify(foundItemRepository, never()).deleteById(any());
+    }
+
+    @Test
+    @DisplayName("Check delete request - Success")
+    public void checkDeleteRequestSuccess() {
+        FoundItemRequest request = SampleTestObjects.createFoundItemRequest();
+
+        Assertions.assertDoesNotThrow(() -> foundItemService.checkDeleteRequest(request));
+    }
+
+    @Test
+    @DisplayName("Check delete request - EntityNotFoundException")
+    public void checkDeleteRequestEntityNotFoundException() {
+        FoundItemRequest request = new FoundItemRequest(); // Incomplete request
+
+        Assertions.assertThrows(EntityNotFoundException.class, () -> foundItemService.checkDeleteRequest(request));
+    }
+
+    @Test
+    @DisplayName("Is user property - Success")
+    public void isUserPropertySuccess() {
+        FoundItemRequest request = SampleTestObjects.createFoundItemRequest();
+
+        when(foundItemRepository.findByIdAndUserEmail(request.getId(), request.getEmail()))
+                .thenReturn(Optional.of(SampleTestObjects.createFoundItem(user, coordinates)));
+
+        Assertions.assertTrue(foundItemService.isUserProperty(request));
+    }
+
+    @Test
+    @DisplayName("Is user property - EntityNotFoundException")
+    public void isUserPropertyEntityNotFoundException() {
+        FoundItemRequest request = SampleTestObjects.createFoundItemRequest();
+
+        when(foundItemRepository.findByIdAndUserEmail(request.getId(), request.getEmail()))
+                .thenThrow(EntityNotFoundException.class);
+
+        Assertions.assertThrows(EntityNotFoundException.class, () -> foundItemService.isUserProperty(request));
     }
 }
 
