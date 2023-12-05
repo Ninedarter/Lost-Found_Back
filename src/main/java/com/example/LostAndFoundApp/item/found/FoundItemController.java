@@ -69,7 +69,7 @@ public class FoundItemController {
     }
 
     @DeleteMapping("/user/deleteItem")
-    public ResponseEntity<FoundItemResponse> delete(@RequestBody FoundItemRequest request) {
+    public ResponseEntity<FoundItemResponse> deleteUserFoundItem(@RequestBody FoundItemRequest request) {
         FoundItemResponse response = foundItemService.deleteUserFoundItem(request);
         return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
