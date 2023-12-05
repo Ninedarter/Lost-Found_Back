@@ -33,7 +33,7 @@ public class LostItemService {
                 throw new EntityNotFoundException();
             }
             LostItem itemById = item.get();
-            return new LostItemResponse(true, itemById, "FOUND BY ID" + id);
+            return new LostItemResponse(true, itemById, "FOUND BY ID " + id);
         } catch (EntityNotFoundException e) {
             return new LostItemResponse(false, "NOT FOUND");
         }
