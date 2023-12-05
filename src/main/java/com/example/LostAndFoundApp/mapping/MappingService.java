@@ -18,7 +18,8 @@ public class MappingService {
     private final UserRepository userRepository;
 
     public LostItem mapLostItem(LostItemRequest request) {
-        com.example.LostAndFoundApp.item.lost.LostItem item = new com.example.LostAndFoundApp.item.lost.LostItem();
+        LostItem item = new LostItem();
+        item.setId(request.getId());
         item.setCategory(request.getCategory());
         item.setTitle(request.getTitle());
         item.setDescription(request.getDescription());

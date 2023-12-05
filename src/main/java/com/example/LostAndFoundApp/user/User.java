@@ -1,6 +1,7 @@
 package com.example.LostAndFoundApp.user;
 
 import com.example.LostAndFoundApp.token.Token;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -49,12 +50,14 @@ public class User implements UserDetails {
   private Gender gender;
 
   @NonNull
+  @JsonIgnore
   private String password;
 
   @Enumerated(EnumType.STRING)
   private Role role;
 
   @OneToMany(mappedBy = "user")
+  @JsonIgnore
   private List<Token> tokens;
 
   @Override
@@ -91,7 +94,4 @@ public class User implements UserDetails {
   public boolean isEnabled() {
     return true;
   }
-
-
-
 }

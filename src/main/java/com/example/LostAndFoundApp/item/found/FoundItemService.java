@@ -145,11 +145,12 @@ public class FoundItemService {
     public FoundItemResponse updateUserFoundItem(FoundItemRequest request) {
 
         List<FoundItem> foundedItems = foundItemRepository.findByUser_Email(request.getEmail());
+
         FoundItem mappedItem = mappingService.mapFoundItem(request);
         try {
             boolean doesBelongToUser = false;
-            for (FoundItem foundedItem : foundedItems) {
-                if (foundedItem.getId() == mappedItem.getId()) {
+            for (FoundItem item : foundedItems) {
+                if (item.getId() == mappedItem.getId()) {
                     doesBelongToUser = true;
                     break;
                 }
@@ -166,7 +167,7 @@ public class FoundItemService {
             new FoundItemResponse(false, "Item to update does not belongs to the user");
 
         }
-        return new FoundItemResponse(true, "Updated successfully");
+        return new FoundItemResponse(false, "Cannot update item");
     }
 
     public FoundItemResponse deleteUserFoundItem(FoundItemRequest request) {
