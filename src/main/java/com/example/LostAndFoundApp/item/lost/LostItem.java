@@ -4,15 +4,14 @@ import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.item.Item;
 import com.example.LostAndFoundApp.item.ItemCategory;
 import com.example.LostAndFoundApp.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
-import static jakarta.persistence.CascadeType.ALL;
 
 
 @Data
@@ -25,7 +24,7 @@ public class LostItem implements Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NonNull
     private ItemCategory category;
@@ -46,11 +45,13 @@ public class LostItem implements Item {
     @NonNull
     @ManyToOne
     @JoinColumn(name = "loser_id")
+//    @JsonIgnore
     private User user;
 
 
     @OneToOne
     @JoinColumn(name = "coordinates_id")
+//    @JsonIgnore
     private Coordinates coordinates;
 
     public LostItem(@NonNull ItemCategory category, @NonNull String title, @NonNull Coordinates coordinates, @NonNull LocalDate dateLost, String description, @NonNull LocalDateTime creationTime, @NonNull User user) {
@@ -64,4 +65,16 @@ public class LostItem implements Item {
     }
 
 
+    @Override
+    public String toString() {
+        return "LostItem{" +
+                "id=" + id +
+                ", category=" + category +
+                ", title='" + title + '\'' +
+                ", dateLost=" + dateLost +
+                ", description='" + description + '\'' +
+                ", user=" + user +
+                ", coordinates=" + coordinates +
+                '}';
+    }
 }

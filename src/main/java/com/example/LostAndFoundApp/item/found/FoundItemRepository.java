@@ -17,4 +17,5 @@ public interface FoundItemRepository extends JpaRepository<FoundItem, Long> {
 
 
     Optional<FoundItem> findByIdAndUserEmail(Long itemId, String email);
+
 }

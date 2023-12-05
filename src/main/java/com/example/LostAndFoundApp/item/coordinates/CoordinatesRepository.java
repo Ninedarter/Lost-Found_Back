@@ -13,4 +13,5 @@ public interface CoordinatesRepository extends JpaRepository<Coordinates,Long> {
             @Param("latitude") Double latitude,
             @Param("longitude") Double longitude
     );
+
 }

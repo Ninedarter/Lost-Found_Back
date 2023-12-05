@@ -12,8 +12,6 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static jakarta.persistence.CascadeType.ALL;
-
 @Data
 @Builder
 @Entity

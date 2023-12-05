@@ -57,7 +57,7 @@ public class FoundItemController {
 
     // Only user items CRUD
 
-    @GetMapping("/user/item")
+    @PostMapping("/user/item")
     public List<FoundItem> getByUserId(@RequestBody FoundItemRequest request) {
         return foundItemService.getAllUserFoundItems(request.getEmail());
     }

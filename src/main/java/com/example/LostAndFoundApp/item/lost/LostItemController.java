@@ -1,9 +1,7 @@
 package com.example.LostAndFoundApp.item.lost;
 
-import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
 import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
 import com.example.LostAndFoundApp.item.lost.response.LostItemResponse;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,9 +51,22 @@ public class LostItemController {
     // Only user items CRUD
 
     @GetMapping("/user/item")
-    public List<LostItem> getByUserId(@RequestBody LostItemRequest request) {
-        return lostItemService.getAllUserFoundItems(request.getEmail());
+    public ResponseEntity<List<LostItem>> getByUserId(@RequestBody LostItemRequest request) {
+        List<LostItem> tems = lostItemService.getAllUserFoundItems(request.getEmail());
+        String valid;
+        return new ResponseEntity<>(tems, HttpStatus.OK);
     }
 
+    @PutMapping("/user/updateItem")
+    public ResponseEntity<LostItemResponse> updateUserFoundItem(@RequestBody LostItemRequest request) {
+        LostItemResponse response = lostItemService.updateUserLostItem(request);
+        return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("/user/deleteItem")
+    public ResponseEntity<LostItemResponse> deleteUserFoundItem(@RequestBody LostItemRequest request) {
+        LostItemResponse response = lostItemService.deleteUserFoundItem(request);
+        return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
 }
