@@ -20,7 +20,6 @@ public class SampleTestObjects {
                 .title("Test Item")
                 .dateFound(LocalDate.now())
                 .description("Sample description")
-                .creationTime(LocalDateTime.now())
                 .coordinates(createCoordinates())
                 .latitude(40.7128)
                 .longitude(-74.0060)
