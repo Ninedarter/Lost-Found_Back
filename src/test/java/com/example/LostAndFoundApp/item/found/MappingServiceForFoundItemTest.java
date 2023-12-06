@@ -4,6 +4,8 @@ import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
 import com.example.LostAndFoundApp.mapping.MappingService;
+import com.example.LostAndFoundApp.report.Report;
+import com.example.LostAndFoundApp.report.ReportUserRequest;
 import com.example.LostAndFoundApp.user.User;
 import com.example.LostAndFoundApp.user.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -15,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.mockito.Mockito.verify;
@@ -74,6 +77,27 @@ public class MappingServiceForFoundItemTest {
         verify(userRepository).findByEmail(request.getEmail());
 
     }
+
+    @Test
+    @DisplayName("Mapping ReportUserRequest to Report with Valid User Email")
+    public void testMapReport() {
+
+        User user = SampleTestObjects.createUser();
+        ReportUserRequest request = SampleTestObjects.createReportUserRequest();
+
+        when(userRepository.findByEmail(request.getReportedUserEmail())).thenReturn(Optional.of(user));
+
+        Report result = mappingService.mapReport(request);
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(user, result.getUser());
+        Assertions.assertEquals(request.getDescription(), result.getDescription());
+        Assertions.assertEquals(LocalDate.now(), result.getReportTime());
+
+        verify(userRepository).findByEmail(request.getReportedUserEmail());
+    }
+
+
 
 
 }

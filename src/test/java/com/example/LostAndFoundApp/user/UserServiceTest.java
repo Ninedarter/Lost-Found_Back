@@ -1,5 +1,10 @@
 package com.example.LostAndFoundApp.user;
 
+import com.example.LostAndFoundApp.mapping.MappingService;
+import com.example.LostAndFoundApp.report.Report;
+import com.example.LostAndFoundApp.report.ReportRepository;
+import com.example.LostAndFoundApp.report.ReportUserRequest;
+import com.example.LostAndFoundApp.report.ReportUserResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +31,12 @@ public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private ReportRepository reportRepository;
+
+    @Mock
+    private MappingService mappingService;
 
     @InjectMocks
     private UserService userService;
@@ -124,6 +135,71 @@ public class UserServiceTest {
 
         Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         Assertions.assertNotNull(response.getBody());
+    }
+
+    @Test
+    @DisplayName("Report user: success")
+    void testReportUser_Success() {
+        ReportUserRequest request = new ReportUserRequest("reportingUser@example.com", "reportedUser@example.com", "Reason for report");
+
+        User reportedUser = createUser();
+        when(userRepository.findByEmail(request.getReportedUserEmail())).thenReturn(Optional.of(reportedUser));
+        when(mappingService.mapReport(request)).thenReturn(new Report());
+
+        ReportUserResponse response = userService.reportUser(request);
+
+        Assertions.assertTrue(response.isSuccess());
+        verify(reportRepository).save(any(Report.class));
+    }
+
+    @Test
+    @DisplayName("Report user: self-reporting, should fail")
+    void testReportUser_SelfReporting() {
+        ReportUserRequest request = new ReportUserRequest("reportingUser@example.com", "reportingUser@example.com", "Reason for report");
+
+        when(mappingService.mapReport(request)).thenReturn(new Report());
+
+        ReportUserResponse response = userService.reportUser(request);
+
+        Assertions.assertFalse(response.isSuccess());
+        verify(reportRepository, never()).save(any(Report.class));
+    }
+
+    @Test
+    @DisplayName("Report user: user does not exist, should fail")
+    void testReportUser_UserDoesNotExist() {
+        ReportUserRequest request = new ReportUserRequest("reportingUser@example.com", "nonExistingUser@example.com", "Reason for report");
+
+        when(userRepository.findByEmail(request.getReportedUserEmail())).thenReturn(Optional.empty());
+        when(mappingService.mapReport(request)).thenReturn(new Report());
+
+        ReportUserResponse response = userService.reportUser(request);
+
+        Assertions.assertFalse(response.isSuccess());
+        verify(reportRepository, never()).save(any(Report.class));
+    }
+
+    @Test
+    @DisplayName("Check if user is reporting itself")
+    void testIsUserReportingItself() {
+        ReportUserRequest request = new ReportUserRequest("user@example.com", "user@example.com", "Reason for report");
+
+        boolean result = userService.isUserReportingItself(request);
+
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    @DisplayName("Check if user exists")
+    void testDoesUserExists() {
+        ReportUserRequest request = new ReportUserRequest("reportedUser@example.com", "reportingUser@example.com", "Reason for report");
+        User reportedUser = createUser();
+
+        when(userRepository.findByEmail(request.getReportedUserEmail())).thenReturn(Optional.of(reportedUser));
+
+        boolean result = userService.doesUserExists(request);
+
+        Assertions.assertTrue(result);
     }
 
 
