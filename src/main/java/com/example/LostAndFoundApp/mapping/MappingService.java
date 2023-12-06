@@ -9,10 +9,13 @@ import com.example.LostAndFoundApp.report.Report;
 import com.example.LostAndFoundApp.report.ReportUserRequest;
 import com.example.LostAndFoundApp.user.User;
 import com.example.LostAndFoundApp.user.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -52,10 +55,16 @@ public class MappingService {
 
 
     public Report mapReport(ReportUserRequest request) {
-        User reportedUser = userRepository.findByEmail(request.getUserEmail()).get();
-        Report report = new Report();
-        report.setUser(reportedUser);
-        report.setDescription(request.getDescription());
-        return report;
+        Optional<User> reportedUser = userRepository.findByEmail(request.getReportedUserEmail());
+        if (reportedUser.isPresent()) {
+            Report report = new Report();
+            report.setUser(reportedUser.get());
+            report.setDescription(request.getDescription());
+            report.setReportTime(LocalDate.now());
+            return report;
+        } else {
+            throw new EntityNotFoundException();
+        }
+
     }
 }

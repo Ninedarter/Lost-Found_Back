@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReportUserRequest {
-
-    private String userEmail;
+    private String reportingUserEmail;
+    private String reportedUserEmail;
     private String description;
-
 
 
 }
