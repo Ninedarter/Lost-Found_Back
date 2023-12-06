@@ -74,7 +74,7 @@ public class UserRepositoryTest {
     @DisplayName("Save user: find user by ID")
     public void findByID_returnUser() {
 
-        User retrievedUser = userRepository.findById(savedUser.getId()).orElse(null);
+        User retrievedUser = userRepository.findById(Long.valueOf(savedUser.getId())).orElse(null);
 
         Assertions.assertEquals(savedUser.getId(), retrievedUser.getId(), "IDs should match");
         Assertions.assertEquals(savedUser.getEmail(), retrievedUser.getEmail(), "Emails should match");
@@ -96,7 +96,7 @@ public class UserRepositoryTest {
                 .build();
 
         userRepository.save(updatedUser);
-        User retrievedUser = userRepository.findById(savedUser.getId()).orElse(null);
+        User retrievedUser = userRepository.findById(Long.valueOf(savedUser.getId())).orElse(null);
 
         Assertions.assertEquals("UpdatedJacob", retrievedUser.getFirstname(), "First names should match");
         Assertions.assertEquals("+311111111", retrievedUser.getPhoneNumber(), "Phone numbers should match");
@@ -106,9 +106,9 @@ public class UserRepositoryTest {
     @DisplayName("Delete User: Repository Should Not Contain Deleted User")
     public void deleteUser_returnUserIsEmpty() {
 
-        userRepository.deleteById(savedUser.getId());
+        userRepository.deleteById(Long.valueOf(savedUser.getId()));
 
-        Optional<User> deletedUser = userRepository.findById(savedUser.getId());
+        Optional<User> deletedUser = userRepository.findById(Long.valueOf(savedUser.getId()));
 
         Assertions.assertTrue(deletedUser.isEmpty());
 

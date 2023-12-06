@@ -8,6 +8,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -98,6 +100,34 @@ public class UserServiceTest {
         // Assert that changing the password with non-matching new passwords throws an IllegalStateException
         Assertions.assertThrows(IllegalStateException.class, () -> userService.changePassword(request, authentication));
     }
+
+    @Test
+    void getById_ExistingId_ReturnsOk() {
+
+        Long id = 1L;
+        User user = new User();
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+
+        ResponseEntity<User> response = userService.getById(id);
+
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertSame(user, response.getBody());
+    }
+
+    @Test
+    void getById_NonExistingId_ReturnsNotFound() {
+
+        Long id = 2L;
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        ResponseEntity<User> response = userService.getById(id);
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertNotNull(response.getBody());
+    }
+
+
+
 
 
 }
