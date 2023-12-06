@@ -57,13 +57,13 @@ public class LostItemController {
     }
 
     @PutMapping("/user/updateItem")
-    public ResponseEntity<LostItemResponse> updateUserFoundItem(@RequestBody LostItemRequest request) {
+    public ResponseEntity<LostItemResponse> updateUserLostItem(@RequestBody LostItemRequest request) {
         LostItemResponse response = lostItemService.updateUserLostItem(request);
         return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/user/deleteItem")
-    public ResponseEntity<LostItemResponse> deleteUserFoundItem(@RequestBody LostItemRequest request) {
+    public ResponseEntity<LostItemResponse> deleteUserLostItem(@RequestBody LostItemRequest request) {
         LostItemResponse response = lostItemService.deleteUserLostItem(request);
         return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }

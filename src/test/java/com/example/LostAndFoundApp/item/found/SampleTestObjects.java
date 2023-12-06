@@ -3,6 +3,8 @@ package com.example.LostAndFoundApp.item.found;
 import com.example.LostAndFoundApp.item.ItemCategory;
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
+import com.example.LostAndFoundApp.report.ReportUserRequest;
+import com.example.LostAndFoundApp.user.ChangePasswordRequest;
 import com.example.LostAndFoundApp.user.Gender;
 import com.example.LostAndFoundApp.user.Role;
 import com.example.LostAndFoundApp.user.User;
@@ -80,6 +82,22 @@ public class SampleTestObjects {
                 .gender(Gender.MALE)
                 .password("password123")
                 .role(Role.USER)
+                .build();
+    }
+
+    public static ReportUserRequest createReportUserRequest() {
+        ReportUserRequest request = new ReportUserRequest();
+        request.setReportedUserEmail("reported.user@example.com");
+        request.setReportingUserEmail("reporting.user@example.com");
+        request.setDescription("This user is behaving inappropriately.");
+        return request;
+    }
+
+    public static ChangePasswordRequest createChangePasswordRequest() {
+        return ChangePasswordRequest.builder()
+                .currentPassword("oldPassword")
+                .newPassword("newPassword")
+                .confirmationPassword("newPassword")
                 .build();
     }
 }
