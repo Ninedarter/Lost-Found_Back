@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -29,7 +28,7 @@ public class FoundItemRequest {
     private Double latitude;
     @Nullable
     private Double longitude;
-
+    private String imageUrl;
 
 
 }

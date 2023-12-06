@@ -4,6 +4,8 @@ package com.example.LostAndFoundApp.item.found;
 import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
 import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
+import com.example.LostAndFoundApp.item.image.Image;
+import com.example.LostAndFoundApp.item.image.ImageRepository;
 import com.example.LostAndFoundApp.mapping.MappingService;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,6 +25,7 @@ public class FoundItemService {
     private final FoundItemRepository foundItemRepository;
     private final CoordinatesRepository coordinatesRepository;
     private final MappingService mappingService;
+    private final ImageRepository imageRepository;
     private static final Logger logger = LogManager.getLogger(FoundItemService.class);
 
 
@@ -56,6 +59,7 @@ public class FoundItemService {
                 throw new EntityExistsException();
             }
             FoundItem mappedItem = mappingService.mapFoundItem(request);
+            imageRepository.save(new Image(request.getImageUrl()));
             coordinatesRepository.save(request.getCoordinates());
             foundItemRepository.save(mappedItem);
             return new FoundItemResponse(true, "Created successfully");

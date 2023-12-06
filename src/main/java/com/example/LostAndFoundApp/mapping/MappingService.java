@@ -5,6 +5,9 @@ import com.example.LostAndFoundApp.item.found.FoundItem;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
 import com.example.LostAndFoundApp.item.lost.LostItem;
 import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
+import com.example.LostAndFoundApp.report.Report;
+import com.example.LostAndFoundApp.report.ReportUserRequest;
+import com.example.LostAndFoundApp.user.User;
 import com.example.LostAndFoundApp.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -45,5 +48,14 @@ public class MappingService {
         item.setCoordinates(request.getCoordinates());
         item.setCreationTime(LocalDateTime.now());
         return item;
+    }
+
+
+    public Report mapReport(ReportUserRequest request) {
+        User reportedUser = userRepository.findByEmail(request.getUserEmail()).get();
+        Report report = new Report();
+        report.setUser(reportedUser);
+        report.setDescription(request.getDescription());
+        return report;
     }
 }

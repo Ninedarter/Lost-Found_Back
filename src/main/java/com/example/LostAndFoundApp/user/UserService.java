@@ -1,11 +1,17 @@
 package com.example.LostAndFoundApp.user;
 
+import com.example.LostAndFoundApp.mapping.MappingService;
+import com.example.LostAndFoundApp.report.Report;
+import com.example.LostAndFoundApp.report.ReportRepository;
+import com.example.LostAndFoundApp.report.ReportUserRequest;
+import com.example.LostAndFoundApp.report.ReportUserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -13,6 +19,9 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository repository;
+    private final MappingService mappingService;
+    private final ReportRepository reportRepository;
+
     public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
 
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
@@ -32,4 +41,21 @@ public class UserService {
         // save the new password
         repository.save(user);
     }
+
+
+    public ReportUserResponse reportUser(ReportUserRequest request) {
+        Report report = mappingService.mapReport(request);
+        if(doesUserExists(request)){
+            reportRepository.save(report);
+            return new ReportUserResponse(true);
+        }
+
+        return new ReportUserResponse(false);
+    }
+
+    private boolean doesUserExists(ReportUserRequest request) {
+        Optional<User> user = repository.findByEmail(request.getUserEmail());
+        return user.isPresent();
+    }
+
 }
