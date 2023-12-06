@@ -52,7 +52,7 @@ public class LostItemController {
 
     @GetMapping("/user/item")
     public ResponseEntity<List<LostItem>> getByUserId(@RequestBody LostItemRequest request) {
-        List<LostItem> tems = lostItemService.getAllUserFoundItems(request.getEmail());
+        List<LostItem> tems = lostItemService.getAllUserLostItems(request.getEmail());
         return new ResponseEntity<>(tems, HttpStatus.OK);
     }
 
@@ -64,7 +64,7 @@ public class LostItemController {
 
     @DeleteMapping("/user/deleteItem")
     public ResponseEntity<LostItemResponse> deleteUserFoundItem(@RequestBody LostItemRequest request) {
-        LostItemResponse response = lostItemService.deleteUserFoundItem(request);
+        LostItemResponse response = lostItemService.deleteUserLostItem(request);
         return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

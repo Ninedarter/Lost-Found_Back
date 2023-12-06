@@ -103,7 +103,7 @@ public class LostItemService {
 
 
     //    User items CRUD
-    public List<LostItem> getAllUserFoundItems(String email) {
+    public List<LostItem> getAllUserLostItems(String email) {
         List<LostItem> items = lostItemRepository.findByUser_Email(email);
         return items;
     }
@@ -140,7 +140,7 @@ public class LostItemService {
     }
 
 
-    public LostItemResponse deleteUserFoundItem(LostItemRequest request) {
+    public LostItemResponse deleteUserLostItem(LostItemRequest request) {
         try {
             checkDeleteRequest(request);
             if (isUserProperty(request)) {
@@ -155,7 +155,7 @@ public class LostItemService {
     }
 
 
-    private boolean isUserProperty(LostItemRequest request) {
+    boolean isUserProperty(LostItemRequest request) {
         Optional<LostItem> byIdAndUserEmail = lostItemRepository.findByIdAndUserEmail(request.getId(), request.getEmail());
         if (!doesExists(byIdAndUserEmail)) {
             throw new EntityNotFoundException("Not found");
@@ -163,7 +163,7 @@ public class LostItemService {
         return true;
     }
 
-    private void checkDeleteRequest(LostItemRequest request) {
+    void checkDeleteRequest(LostItemRequest request) {
         if (request.getId() == null) {
             throw new EntityNotFoundException("Not found or item don't belong to user");
         }

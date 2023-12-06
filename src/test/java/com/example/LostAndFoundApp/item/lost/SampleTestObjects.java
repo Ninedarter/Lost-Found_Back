@@ -2,6 +2,7 @@ package com.example.LostAndFoundApp.item.lost;
 
 import com.example.LostAndFoundApp.item.ItemCategory;
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
+import com.example.LostAndFoundApp.item.found.FoundItem;
 import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
 import com.example.LostAndFoundApp.user.Gender;
 import com.example.LostAndFoundApp.user.Role;
@@ -9,6 +10,8 @@ import com.example.LostAndFoundApp.user.User;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SampleTestObjects {
 
@@ -49,6 +52,30 @@ public class SampleTestObjects {
                 .creationTime(LocalDateTime.now())
                 .user(user)
                 .coordinates(coordinates)
+                .build();
+    }
+
+    public static List<LostItem> createLostItemsWithDifferentUsers() {
+        User user1 = createUser("test@example.com");
+        User user2 = createUser("anotheruser@example.com");
+
+        List<LostItem> lostItems = new ArrayList<>();
+        lostItems.add(createLostItem(user1, createCoordinates()));
+        lostItems.add(createLostItem(user2, createCoordinates()));
+
+        return lostItems;
+    }
+
+    private static User createUser(String email) {
+        return User.builder()
+                .firstname("Sample")
+                .lastname("User")
+                .email(email)
+                .phoneNumber("+1234567890")
+                .dob(LocalDate.of(1990, 1, 1))
+                .gender(Gender.MALE)
+                .password("password123")
+                .role(Role.USER)
                 .build();
     }
 
