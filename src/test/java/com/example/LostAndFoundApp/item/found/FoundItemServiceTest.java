@@ -4,6 +4,7 @@ import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
 import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
+import com.example.LostAndFoundApp.item.image.ImageRepository;
 import com.example.LostAndFoundApp.mapping.MappingService;
 import com.example.LostAndFoundApp.user.Gender;
 import com.example.LostAndFoundApp.user.Role;
@@ -41,6 +42,9 @@ public class FoundItemServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private ImageRepository imageRepository;
 
     @Mock
     private MappingService mappingService;

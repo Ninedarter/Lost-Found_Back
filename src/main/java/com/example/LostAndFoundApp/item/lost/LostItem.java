@@ -42,7 +42,6 @@ public class LostItem implements Item {
     @NonNull
     private LocalDateTime creationTime;
 
-    @NonNull
     @ManyToOne
     @JoinColumn(name = "loser_id")
 //    @JsonIgnore

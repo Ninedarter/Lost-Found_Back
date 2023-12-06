@@ -1,5 +1,10 @@
 package com.example.LostAndFoundApp.user;
 
+import com.example.LostAndFoundApp.mapping.MappingService;
+import com.example.LostAndFoundApp.report.Report;
+import com.example.LostAndFoundApp.report.ReportRepository;
+import com.example.LostAndFoundApp.report.ReportUserRequest;
+import com.example.LostAndFoundApp.report.ReportUserResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +22,9 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository repository;
+    private final MappingService mappingService;
+    private final ReportRepository reportRepository;
+
     public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
 
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
@@ -50,4 +58,31 @@ public class UserService {
             return new ResponseEntity<>(new User(), HttpStatus.NOT_FOUND);
         }
     }
+
+
+    public ReportUserResponse reportUser(ReportUserRequest request) {
+        try {
+            Report report = mappingService.mapReport(request);
+            if (doesUserExists(request) && !isUserReportingItself(request)) {
+                reportRepository.save(report);
+                return new ReportUserResponse(true);
+            }
+
+        } catch (EntityNotFoundException e) {
+            return new ReportUserResponse(false);
+        }
+        return new ReportUserResponse(false);
+    }
+
+    private boolean isUserReportingItself(ReportUserRequest request) {
+        return request.getReportingUserEmail().equalsIgnoreCase(request.getReportedUserEmail());
+    }
+
+    private boolean doesUserExists(ReportUserRequest request) {
+        Optional<User> user = repository.findByEmail(request.getReportedUserEmail());
+        return user.isPresent();
+    }
+
+
+
 }
