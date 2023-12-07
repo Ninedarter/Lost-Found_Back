@@ -10,10 +10,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -24,6 +27,7 @@ public class UserService {
     private final UserRepository repository;
     private final MappingService mappingService;
     private final ReportRepository reportRepository;
+    private final UserRepository userRepository;
 
     public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
 
@@ -60,26 +64,45 @@ public class UserService {
     }
 
 
-    public ReportUserResponse reportUser(ReportUserRequest request) {
+
+
+
+    public ReportUserResponse reportUser(ReportUserRequest request, Principal connectedUser) {
         try {
-            Report report = mappingService.mapReport(request);
-            if (doesUserExists(request) && !isUserReportingItself(request)) {
+            UserDetails userDetails = (UserDetails) ((Authentication) connectedUser).getPrincipal();
+            String reportingUserEmail = userDetails.getUsername();
+            Optional<User> optionalUser = userRepository.findById(request.getReportedUserId());
+            if (optionalUser.isPresent()) {
+                User reportedUser = optionalUser.get();
+
+                if (reportingUserEmail.equalsIgnoreCase(reportedUser.getEmail())) {
+                    return new ReportUserResponse(false);
+                }
+            } else {
+                throw new NoSuchElementException();
+            }
+
+            Report report = mappingService.mapReport(request, reportingUserEmail);
+            if (doesUserExists(request)) {
                 reportRepository.save(report);
                 return new ReportUserResponse(true);
             }
 
-        } catch (EntityNotFoundException e) {
+        } catch (
+                EntityNotFoundException e) {
+            return new ReportUserResponse(false);
+        } catch (
+                NoSuchElementException e) {
             return new ReportUserResponse(false);
         }
-        return new ReportUserResponse(false);
+        return new
+                ReportUserResponse(false);
+
     }
 
-    boolean isUserReportingItself(ReportUserRequest request) {
-        return request.getUserWhoIsReportingEmail().equalsIgnoreCase(request.getReportedUserEmail());
-    }
 
     boolean doesUserExists(ReportUserRequest request) {
-        Optional<User> user = repository.findByEmail(request.getReportedUserEmail());
+        Optional<User> user = repository.findById(request.getReportedUserId());
         return user.isPresent();
     }
 

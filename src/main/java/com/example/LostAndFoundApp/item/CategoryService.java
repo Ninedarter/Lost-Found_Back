@@ -1,11 +1,7 @@
 package com.example.LostAndFoundApp.item;
 
-import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
-import com.example.LostAndFoundApp.item.found.FoundItem;
-import com.example.LostAndFoundApp.item.Item;
 import com.example.LostAndFoundApp.item.found.FoundItemRepository;
 import com.example.LostAndFoundApp.mapping.MappingService;
-import jakarta.persistence.Enumerated;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
