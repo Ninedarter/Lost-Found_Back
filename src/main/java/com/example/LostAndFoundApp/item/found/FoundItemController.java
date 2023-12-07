@@ -1,6 +1,7 @@
 package com.example.LostAndFoundApp.item.found;
 
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
+import com.example.LostAndFoundApp.item.found.request.FoundItemRequestEasier;
 import com.example.LostAndFoundApp.item.found.request.GetByCategoryRequest;
 import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @CrossOrigin
@@ -28,6 +30,12 @@ public class FoundItemController {
     @PostMapping("/add")
     public ResponseEntity<FoundItemResponse> add(@RequestBody FoundItemRequest request) {
         FoundItemResponse response = foundItemService.add(request);
+        return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.CREATED) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/add-easier")
+    public ResponseEntity<FoundItemResponse> addEasier(@RequestBody FoundItemRequestEasier request, Principal principal) {
+        FoundItemResponse response = foundItemService.addEasier(request,principal);
         return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.CREATED) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

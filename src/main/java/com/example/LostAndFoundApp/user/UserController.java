@@ -29,6 +29,11 @@ public class UserController {
         return service.getSelf(connectedUser);
     }
 
+    @GetMapping("/amibanned")
+    public ResponseEntity<Boolean> checkIfSelfIsBanned(Principal connectedUser) {
+        return service.checkIfBanned(connectedUser);
+    }
+
     @PostMapping("/ban/{id}")
     @PreAuthorize("hasAuthority('admin:update')")
     public ResponseEntity<?> banUser(@PathVariable("id") Long id) {

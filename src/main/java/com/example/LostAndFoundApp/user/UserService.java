@@ -77,6 +77,15 @@ public class UserService {
         repository.save(user);
     }
 
+    public ResponseEntity<Boolean> checkIfBanned(Principal connectedUser) {
+        User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+
+        if(user.getStatus() == Status.BANNED) {
+            return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+        }
+    }
 
 
     public ReportUserResponse reportUser(ReportUserRequest request, Principal connectedUser) {

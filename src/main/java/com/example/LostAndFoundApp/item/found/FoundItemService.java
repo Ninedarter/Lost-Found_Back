@@ -3,18 +3,24 @@ package com.example.LostAndFoundApp.item.found;
 
 import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
+import com.example.LostAndFoundApp.item.found.request.FoundItemRequestEasier;
 import com.example.LostAndFoundApp.item.found.request.GetByCategoryRequest;
 import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
 import com.example.LostAndFoundApp.item.image.Image;
 import com.example.LostAndFoundApp.item.image.ImageRepository;
 import com.example.LostAndFoundApp.mapping.MappingService;
+import com.example.LostAndFoundApp.user.User;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,6 +75,15 @@ public class FoundItemService {
             return new FoundItemResponse("Item already exists");
         }
 
+    }
+
+    public FoundItemResponse addEasier(FoundItemRequestEasier request, Principal connectedUser) {
+        User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+
+        coordinatesRepository.save(request.getCoordinates());
+        foundItemRepository.save(mappingService.mapFoundItemEasier(request,user));
+
+        return new FoundItemResponse(true, "Created successfully");
     }
 
 
