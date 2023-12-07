@@ -41,14 +41,10 @@ public class UserController {
     @PostMapping("/report")
     public ResponseEntity<?> reportUser(@RequestBody ReportUserRequest request, Principal connectedUser) {
         UserDetails userDetails = (UserDetails) ((Authentication) connectedUser).getPrincipal();
-        String userEmail = userDetails.getUsername();
         if (!userDetails.isCredentialsNonExpired()) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        if (userEmail.equalsIgnoreCase(request.getReportedUserEmail())) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        ReportUserResponse response = service.reportUser(request);
+        ReportUserResponse response = service.reportUser(request, connectedUser);
         return (response.isSuccess()) ? new ResponseEntity(response, HttpStatus.OK) : new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
 }

@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReportUserRequest {
-    private String userWhoIsReportingEmail;
-    private String reportedUserEmail;
+    private Long reportedUserId;
     private String description;
-
 
 }
