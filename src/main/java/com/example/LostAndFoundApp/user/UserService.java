@@ -75,14 +75,13 @@ public class UserService {
     }
 
     boolean isUserReportingItself(ReportUserRequest request) {
-        return request.getReportingUserEmail().equalsIgnoreCase(request.getReportedUserEmail());
+        return request.getUserWhoIsReportingEmail().equalsIgnoreCase(request.getReportedUserEmail());
     }
 
     boolean doesUserExists(ReportUserRequest request) {
         Optional<User> user = repository.findByEmail(request.getReportedUserEmail());
         return user.isPresent();
     }
-
 
 
 }
