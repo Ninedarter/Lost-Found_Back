@@ -1,8 +1,10 @@
 package com.example.LostAndFoundApp.item.found;
 
+import com.example.LostAndFoundApp.item.ItemCategory;
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
+import com.example.LostAndFoundApp.item.found.request.GetByCategoryRequest;
 import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
 import com.example.LostAndFoundApp.item.image.ImageRepository;
 import com.example.LostAndFoundApp.mapping.MappingService;
@@ -410,6 +412,21 @@ public class FoundItemServiceTest {
                 .thenThrow(EntityNotFoundException.class);
 
         Assertions.assertThrows(EntityNotFoundException.class, () -> foundItemService.isUserProperty(request));
+    }
+
+    @Test
+    @DisplayName("Get all found items by category - Success")
+    public void getAllByCategorySuccess() {
+
+        ItemCategory category = ItemCategory.KEYS;
+        List<FoundItem> foundItems = Arrays.asList(foundItem1, foundItem2);
+
+        when(foundItemRepository.findByCategory(category)).thenReturn(foundItems);
+
+        FoundItemResponse response = foundItemService.getAllByCategory(new GetByCategoryRequest(category));
+
+        Assertions.assertEquals(foundItems, response.getAllFound(), "Expected items to match");
+        verify(foundItemRepository, times(1)).findByCategory(category);
     }
 }
 

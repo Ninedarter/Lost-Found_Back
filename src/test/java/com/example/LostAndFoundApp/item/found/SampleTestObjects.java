@@ -87,8 +87,7 @@ public class SampleTestObjects {
 
     public static ReportUserRequest createReportUserRequest() {
         ReportUserRequest request = new ReportUserRequest();
-        request.setReportedUserEmail("reported.user@example.com");
-        request.setReportingUserEmail("reporting.user@example.com");
+        request.setReportedUserId(1L);  // Use user ID instead of email
         request.setDescription("This user is behaving inappropriately.");
         return request;
     }
@@ -100,4 +99,5 @@ public class SampleTestObjects {
                 .confirmationPassword("newPassword")
                 .build();
     }
+
 }
