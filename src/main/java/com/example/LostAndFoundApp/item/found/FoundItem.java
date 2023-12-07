@@ -23,7 +23,7 @@ public class FoundItem implements Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
+    @Enumerated(EnumType.STRING)
     private ItemCategory category;
 
     @NonNull

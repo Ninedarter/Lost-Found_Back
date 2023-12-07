@@ -1,6 +1,9 @@
 package com.example.LostAndFoundApp.item;
 
-public interface Item {
+import org.springframework.stereotype.Repository;
 
+
+@Repository
+public interface Item {
 
 }
