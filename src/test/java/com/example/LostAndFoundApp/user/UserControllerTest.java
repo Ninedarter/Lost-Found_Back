@@ -41,7 +41,7 @@ public class UserControllerTest {
         ResponseEntity<User> responseEntity = userController.getById(userId);
 
         verify(userService, times(1)).getById(userId);
-        Assertions.assertSame(responseEntity.getBody(), sampleUser);
+        Assertions.assertSame(sampleUser, responseEntity.getBody());
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 

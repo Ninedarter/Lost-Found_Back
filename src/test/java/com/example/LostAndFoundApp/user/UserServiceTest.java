@@ -64,14 +64,11 @@ public class UserServiceTest {
         // Create a mock for UsernamePasswordAuthenticationToken
         UsernamePasswordAuthenticationToken authentication = mock(UsernamePasswordAuthenticationToken.class);
 
-        // Ensure that the type returned by authentication.getPrincipal() is User
-        when(authentication.getPrincipal()).thenReturn(user);
-
         when(passwordEncoder.matches("oldPassword", "oldPassword")).thenReturn(true);
         when(passwordEncoder.encode("newPassword")).thenReturn("encodedNewPassword");
 
         // change password
-        userService.changePassword(request, authentication);
+        userService.changePassword(request, new UsernamePasswordAuthenticationToken(user, null));
 
         // Capture the argument after the save method is called
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
@@ -91,11 +88,10 @@ public class UserServiceTest {
         User user = createUser();
 
         UsernamePasswordAuthenticationToken authentication = mock(UsernamePasswordAuthenticationToken.class);
-        when(authentication.getPrincipal()).thenReturn(user);
         when(passwordEncoder.matches("wrongCurrentPassword", user.getPassword())).thenReturn(false);
 
         // Assert that changing the password with the wrong current password throws an IllegalStateException
-        Assertions.assertThrows(IllegalStateException.class, () -> userService.changePassword(request, authentication));
+        Assertions.assertThrows(IllegalStateException.class, () -> userService.changePassword(request, new UsernamePasswordAuthenticationToken(user, null)));
     }
 
     @Test

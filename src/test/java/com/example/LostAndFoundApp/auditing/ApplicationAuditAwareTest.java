@@ -1,4 +1,4 @@
-package com.example.LostAndFoundApp.item.auditing;
+package com.example.LostAndFoundApp.auditing;
 
 import com.example.LostAndFoundApp.auditing.ApplicationAuditAware;
 import com.example.LostAndFoundApp.user.User;

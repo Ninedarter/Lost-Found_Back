@@ -8,6 +8,7 @@ class LostAndFoundAppApplicationTests {
 
 	@Test
 	void contextLoads() {
+		LostAndFoundAppApplication.main(new String[]{});
 	}
 
 }
