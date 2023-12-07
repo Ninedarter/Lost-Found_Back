@@ -54,13 +54,11 @@ public class MappingService {
     }
 
 
-    public Report mapReport(ReportUserRequest request) {
-        Optional<User> reportedUser = userRepository.findByEmail(request.getReportedUserEmail());
+    public Report mapReport(ReportUserRequest request, String reportingUserEmail) {
+        Optional<User> reportedUser = userRepository.findById(request.getReportedUserId());
         if (reportedUser.isPresent()) {
-            Report report = new Report();
-            report.setUser(reportedUser.get());
-            report.setDescription(request.getDescription());
-            report.setReportTime(LocalDate.now());
+            User reportingUser = userRepository.findByEmail(reportingUserEmail).get();
+            Report report = new Report(reportedUser.get(), reportingUser, request.getDescription(), LocalDate.now());
             return report;
         } else {
             throw new EntityNotFoundException();
