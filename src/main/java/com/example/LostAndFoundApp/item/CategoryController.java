@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-    @CrossOrigin
-    @RestController
-    @RequiredArgsConstructor
-    @RequestMapping("/api/v1/categories")
+@CrossOrigin
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/categories")
 
-    public class CategoryController {
+public class CategoryController {
 
-        private final CategoryService CategoryService;
+    private final CategoryService CategoryService;
 
-        @GetMapping("/all")
-        public ResponseEntity<List<ItemCategory>> getCategoryList() {
-            List<ItemCategory> all = CategoryService.getCategoryList();
-            return new ResponseEntity<>(all, HttpStatus.OK);
-        }
+    @GetMapping("/all")
+    public ResponseEntity<List<ItemCategory>> getCategoryList() {
+        List<ItemCategory> all = CategoryService.getCategoryList();
+        return new ResponseEntity<>(all, HttpStatus.OK);
+    }
 }
