@@ -34,7 +34,7 @@ public class ApplicationAuditAwareTest {
     @DisplayName("Get current auditor when authenticated")
     void testGetCurrentAuditorAuthenticated() {
         User user = new User();
-        user.setId(1);
+        user.setId(1L);
 
         // Sample list of authorities
         List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
@@ -62,7 +62,7 @@ public class ApplicationAuditAwareTest {
     @DisplayName("Get current auditor when anonymous authentication")
     void testGetCurrentAuditorAnonymousAuthentication() {
         User user = new User();
-        user.setId(1);
+        user.setId(1L);
 
         List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_ANONYMOUS"));
 

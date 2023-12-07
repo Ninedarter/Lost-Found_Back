@@ -8,24 +8,18 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Principal;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
@@ -81,5 +75,21 @@ public class UserControllerTest {
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
+    @Test
+    void reportUser_ValidRequest_ReturnsOk() {
+        ReportUserRequest request = SampleTestObjects.createReportUserRequest();
+
+        Authentication mockAuthentication = mock(Authentication.class);
+        UserDetails mockUserDetails = mock(UserDetails.class);
+        when(mockAuthentication.getPrincipal()).thenReturn(mockUserDetails);
+        when(mockUserDetails.isCredentialsNonExpired()).thenReturn(true);
+
+        when(userService.reportUser(request, mockAuthentication)).thenReturn(new ReportUserResponse(true));
+
+        ResponseEntity<?> responseEntity = userController.reportUser(request, mockAuthentication);
+
+        verify(userService, times(1)).reportUser(request, mockAuthentication);
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
 
 }

@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class UserTest {
 
     private final User user = User.builder()
-            .id(1)
+            .id(1L)
             .firstname("John")
             .lastname("Doe")
             .email("john.doe@example.com")
