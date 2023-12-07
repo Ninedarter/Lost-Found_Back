@@ -1,5 +1,6 @@
 package com.example.LostAndFoundApp.item.found;
 
+import com.example.LostAndFoundApp.item.ItemCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +16,8 @@ public interface FoundItemRepository extends JpaRepository<FoundItem, Long> {
 
     Optional<FoundItem> findByCoordinatesId(Long coordinatesId);
 
-
     Optional<FoundItem> findByIdAndUserEmail(Long itemId, String email);
+
+    List<FoundItem> findByCategory(ItemCategory category);
 
 }

@@ -44,6 +44,6 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         ReportUserResponse response = service.reportUser(request);
-        return (response.isSuccess()) ? new ResponseEntity(response, HttpStatus.OK) : new ResponseEntity(response, HttpStatus.MULTI_STATUS);
+        return (response.isSuccess()) ? new ResponseEntity(response, HttpStatus.OK) : new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
 }
