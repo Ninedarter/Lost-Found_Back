@@ -23,6 +23,11 @@ public class UserController {
         return service.getById(id);
     }
 
+    @GetMapping("/self")
+    public ResponseEntity<User> getSelfInfo(Principal connectedUser) {
+        return service.getSelf(connectedUser);
+    }
+
     @PatchMapping
     public ResponseEntity<?> changePassword(
             @RequestBody ChangePasswordRequest request,
