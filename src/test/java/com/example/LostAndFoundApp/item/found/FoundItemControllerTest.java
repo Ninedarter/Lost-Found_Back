@@ -3,6 +3,7 @@ package com.example.LostAndFoundApp.item.found;
 import com.example.LostAndFoundApp.item.ItemCategory;
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
+import com.example.LostAndFoundApp.item.found.request.GetByCategoryRequest;
 import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
 import com.example.LostAndFoundApp.user.User;
 import org.junit.jupiter.api.Assertions;
@@ -266,8 +267,6 @@ public class FoundItemControllerTest {
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         Assertions.assertEquals(failureResponse, responseEntity.getBody());
     }
-
-
 
 
 }
