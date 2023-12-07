@@ -69,7 +69,13 @@ public class UserService {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    public void banUser(Long id) {
+        User user = getById(id).getBody();
 
+        assert user != null;
+        user.setStatus(Status.BANNED);
+        repository.save(user);
+    }
 
 
 

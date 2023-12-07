@@ -5,6 +5,7 @@ import com.example.LostAndFoundApp.report.ReportUserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,13 @@ public class UserController {
     @GetMapping("/self")
     public ResponseEntity<User> getSelfInfo(Principal connectedUser) {
         return service.getSelf(connectedUser);
+    }
+
+    @PostMapping("/ban/{id}")
+    @PreAuthorize("hasAuthority('admin:update')")
+    public ResponseEntity<?> banUser(@PathVariable("id") Long id) {
+        service.banUser(id);
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping

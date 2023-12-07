@@ -45,6 +45,8 @@ public class User implements UserDetails {
   @NonNull
   private LocalDate dob;
 
+  private Status status;
+
   @NonNull
   @Enumerated(EnumType.STRING)
   private Gender gender;
