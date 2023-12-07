@@ -63,7 +63,19 @@ public class UserService {
         }
     }
 
+    public ResponseEntity<User> getSelf(Principal connectedUser) {
+        User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    public void banUser(Long id) {
+        User user = getById(id).getBody();
+
+        assert user != null;
+        user.setStatus(Status.BANNED);
+        repository.save(user);
+    }
 
 
 
