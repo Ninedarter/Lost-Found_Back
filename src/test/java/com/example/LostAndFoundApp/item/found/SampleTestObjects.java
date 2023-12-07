@@ -88,7 +88,7 @@ public class SampleTestObjects {
     public static ReportUserRequest createReportUserRequest() {
         ReportUserRequest request = new ReportUserRequest();
         request.setReportedUserEmail("reported.user@example.com");
-        request.setReportingUserEmail("reporting.user@example.com");
+        request.setUserWhoIsReportingEmail("reporting.user@example.com");
         request.setDescription("This user is behaving inappropriately.");
         return request;
     }
