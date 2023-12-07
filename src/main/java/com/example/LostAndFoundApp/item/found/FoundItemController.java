@@ -1,6 +1,7 @@
 package com.example.LostAndFoundApp.item.found;
 
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
+import com.example.LostAndFoundApp.item.found.request.GetByCategoryRequest;
 import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -76,6 +77,12 @@ public class FoundItemController {
 
 
 
+
+    @PostMapping("/category")
+    public ResponseEntity<FoundItemResponse> getAllByCategory(@RequestBody GetByCategoryRequest request){
+     FoundItemResponse response =   foundItemService.getAllByCategory(request);
+     return  new ResponseEntity<>(response,HttpStatus.OK);
+    }
 
 
 }

@@ -3,6 +3,7 @@ package com.example.LostAndFoundApp.item.found;
 
 import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
+import com.example.LostAndFoundApp.item.found.request.GetByCategoryRequest;
 import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
 import com.example.LostAndFoundApp.item.image.Image;
 import com.example.LostAndFoundApp.item.image.ImageRepository;
@@ -204,4 +205,8 @@ public class FoundItemService {
     }
 
 
+    public FoundItemResponse getAllByCategory(GetByCategoryRequest request) {
+        List<FoundItem> allByCategory = foundItemRepository.findByCategory(request.getCategory());
+        return new FoundItemResponse(allByCategory);
+    }
 }
