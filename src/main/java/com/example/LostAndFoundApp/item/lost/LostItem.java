@@ -26,7 +26,7 @@ public class LostItem implements Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
+    @Enumerated(EnumType.STRING)
     private ItemCategory category;
 
     @NonNull
@@ -38,6 +38,9 @@ public class LostItem implements Item {
 
     @Nullable
     private String description;
+
+    @Nullable
+    private String reward;
 
     @NonNull
     private LocalDateTime creationTime;
@@ -53,12 +56,13 @@ public class LostItem implements Item {
 //    @JsonIgnore
     private Coordinates coordinates;
 
-    public LostItem(@NonNull ItemCategory category, @NonNull String title, @NonNull Coordinates coordinates, @NonNull LocalDate dateLost, String description, @NonNull LocalDateTime creationTime, @NonNull User user) {
+    public LostItem(@NonNull ItemCategory category, @NonNull String title, @NonNull Coordinates coordinates, @NonNull LocalDate dateLost, String description, String reward, @NonNull LocalDateTime creationTime, @NonNull User user) {
         this.category = category;
         this.title = title;
         this.coordinates = coordinates;
         this.dateLost = dateLost;
         this.description = description;
+        this.reward = reward;
         this.creationTime = creationTime;
         this.user = user;
     }
@@ -72,6 +76,7 @@ public class LostItem implements Item {
                 ", title='" + title + '\'' +
                 ", dateLost=" + dateLost +
                 ", description='" + description + '\'' +
+                ", reward=" + reward +
                 ", user=" + user +
                 ", coordinates=" + coordinates +
                 '}';
