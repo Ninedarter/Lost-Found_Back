@@ -21,6 +21,10 @@ public class Report {
     @JoinColumn(name = "reportedUser")
     private User user;
 
+    @OneToOne
+
+    private User reportee;
+
     private String description;
 
     private LocalDate reportTime;
