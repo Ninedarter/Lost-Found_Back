@@ -1,17 +1,15 @@
 package com.example.LostAndFoundApp.item.lost;
 
-import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.item.Item;
 import com.example.LostAndFoundApp.item.ItemCategory;
+import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.user.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 
 
 @Data
