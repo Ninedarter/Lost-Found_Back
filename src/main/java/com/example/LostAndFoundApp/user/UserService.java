@@ -64,6 +64,20 @@ public class UserService {
         }
     }
 
+    public ResponseEntity<User> getByEmail(String email) {
+        Optional<User> u = repository.findByEmail(email);
+
+        try {
+            if (u.isEmpty()) {
+                throw new EntityNotFoundException();
+            }
+
+            return new ResponseEntity<>(u.get(), HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(new User(), HttpStatus.NOT_FOUND);
+        }
+    }
+
     public ResponseEntity<User> getSelf(Principal connectedUser) {
         User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 
@@ -72,6 +86,14 @@ public class UserService {
 
     public void banUser(Long id) {
         User user = getById(id).getBody();
+
+        assert user != null;
+        user.setStatus(Status.BANNED);
+        repository.save(user);
+    }
+
+    public void banUserByEmail(String email) {
+        User user = getByEmail(email).getBody();
 
         assert user != null;
         user.setStatus(Status.BANNED);

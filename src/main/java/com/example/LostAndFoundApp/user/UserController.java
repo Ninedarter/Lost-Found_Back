@@ -26,6 +26,11 @@ public class UserController {
         return service.getById(id);
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<User> getByEmail(@PathVariable("email") String email) {
+        return service.getByEmail(email);
+    }
+
     @GetMapping("/self")
     public ResponseEntity<User> getSelfInfo(Principal connectedUser) {
         return service.getSelf(connectedUser);
@@ -40,6 +45,13 @@ public class UserController {
     @PreAuthorize("hasAuthority('admin:update')")
     public ResponseEntity<?> banUser(@PathVariable("id") Long id) {
         service.banUser(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/ban/email/{email}")
+    @PreAuthorize("hasAuthority('admin:update')")
+    public ResponseEntity<?> banUser(@PathVariable("email") String email) {
+        service.banUserByEmail(email);
         return ResponseEntity.ok().build();
     }
 
@@ -64,7 +76,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/reports/all")
+    @GetMapping("/reports/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAll(Principal connectedUser) {
         return new ResponseEntity<>(reportsService.getAllReports(), HttpStatus.OK);
