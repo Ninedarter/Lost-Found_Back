@@ -1,5 +1,6 @@
 package com.example.LostAndFoundApp.report;
 
+import com.example.LostAndFoundApp.user.Status;
 import com.example.LostAndFoundApp.user.User;
 import com.example.LostAndFoundApp.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class ReportsService {
 
         List<User> users = userRepository.findAll();
         for (User user : users) {
-            if (user.getReports().size() > 0) {
+            if (user.getReports().size() > 0 && user.getStatus()!= Status.BANNED) {
                 UserReportsDTO userReportsDTO = new UserReportsDTO();
                 userReportsDTO.setUserEmail(user.getEmail());
                 userReportsDTO.setReports(mapReportsToDTOs(user.getReports()));
