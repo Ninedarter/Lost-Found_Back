@@ -58,10 +58,11 @@ public class UserController {
         return (response.isSuccess()) ? new ResponseEntity(response, HttpStatus.OK) : new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/reports/all")
-    public ResponseEntity<?> getAll() {
 
-        return new ResponseEntity(reportsService.getAllReports(), HttpStatus.OK);
+    @PostMapping("/reports/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAll(Principal connectedUser) {
+        return new ResponseEntity<>(reportsService.getAllReports(), HttpStatus.OK);
     }
 
 
