@@ -92,4 +92,29 @@ public class UserControllerTest {
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
+    @Test
+    void getSelfInfo_UserExists_ReturnsOk() {
+        Principal principal = mock(Principal.class);
+        when(userService.getSelf(principal)).thenReturn(new ResponseEntity<>(sampleUser, HttpStatus.OK));
+
+        ResponseEntity<User> responseEntity = userController.getSelfInfo(principal);
+
+        verify(userService, times(1)).getSelf(principal);
+        Assertions.assertSame(sampleUser, responseEntity.getBody());
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+
+    @Test
+    void banUser_ValidUserId_ReturnsOk() {
+        Long userId = 1L;
+        doNothing().when(userService).banUser(userId);
+
+        ResponseEntity<?> responseEntity = userController.banUser(userId);
+
+        verify(userService, times(1)).banUser(userId);
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+
+
+
 }

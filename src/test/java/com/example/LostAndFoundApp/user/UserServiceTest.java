@@ -163,62 +163,6 @@ public class UserServiceTest {
         verify(reportRepository).save(any(Report.class));
     }
 
-//    @Test
-//    @DisplayName("Report user: self-reporting, should fail")
-//    void testReportUser_SelfReporting() {
-//        ReportUserRequest request = new ReportUserRequest(1L, "Reason for report");
-//
-//        Authentication mockAuthentication = mock(Authentication.class);
-//        UserDetails mockUserDetails = new org.springframework.security.core.userdetails.User(
-//                "reportingUser@example.com",
-//                "password",
-//                Collections.emptyList()
-//        );
-//
-//        when(mockAuthentication.getPrincipal()).thenReturn(mockUserDetails);
-//
-//        User selfReportingUser = createUser();
-//        selfReportingUser.setId(1L);
-//
-//        when(userRepository.findById(request.getReportedUserId())).thenReturn(Optional.of(selfReportingUser));
-//
-//        // Add logging
-//        System.out.println("Reporting user ID: " + selfReportingUser.getId());
-//        System.out.println("Reported user ID: " + request.getReportedUserId());
-//
-//        ReportUserResponse response = userService.reportUser(request, mockAuthentication);
-//
-//        // Add logging
-//        System.out.println("Response isSuccess(): " + response.isSuccess());
-//
-//        Assertions.assertFalse(response.isSuccess());
-//        verify(reportRepository, never()).save(any(Report.class));
-//    }
-
-//    @Test
-//    @DisplayName("Report user: user does not exist, should fail")
-//    void testReportUser_UserDoesNotExist() {
-//        ReportUserRequest request = new ReportUserRequest(1L, "Reason for report"); // Assuming 1L is the reported user's ID
-//
-//        UserDetails mockUserDetails = new org.springframework.security.core.userdetails.User(
-//                "reportingUser@example.com",
-//                "password",
-//                Collections.emptyList()
-//        );
-//
-//        Authentication mockAuthentication = new UsernamePasswordAuthenticationToken(mockUserDetails, "password");
-//
-//        when(userRepository.findById(request.getReportedUserId())).thenReturn(Optional.empty());
-//        when(mappingService.mapReport(request, mockUserDetails.getUsername())).thenReturn(new Report());
-//
-//        lenient().when(reportRepository.save(any(Report.class))).thenReturn(mock(Report.class));
-//
-//        ReportUserResponse response = userService.reportUser(request, mockAuthentication);
-//
-//        Assertions.assertFalse(response.isSuccess());
-//        verify(reportRepository, never()).save(any(Report.class));
-//    }
-
     @Test
     @DisplayName("Check if user exists")
     void testDoesUserExists() {
@@ -232,8 +176,32 @@ public class UserServiceTest {
         Assertions.assertTrue(result);
     }
 
+    @Test
+    void getSelf_UserExists_ReturnsOk() {
+        UserService userService = new UserService(passwordEncoder, userRepository, mappingService, reportRepository, userRepository);
+        User mockUser = new User();
+        Principal mockPrincipal = new UsernamePasswordAuthenticationToken(mockUser, null);
 
+        ResponseEntity<User> responseEntity = userService.getSelf(mockPrincipal);
 
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertSame(mockUser, responseEntity.getBody());
+    }
 
+    @Test
+    void banUser_UserExists_StatusBanned() {
+
+        UserService userService = new UserService(passwordEncoder, userRepository, mappingService, reportRepository, userRepository);
+        User mockUser = new User();
+        mockUser.setId(1L);
+        Optional<User> optionalUser = Optional.of(mockUser);
+        when(userRepository.findById(1L)).thenReturn(optionalUser);
+
+        userService.banUser(1L);
+
+        verify(userRepository, times(1)).findById(1L);
+        Assertions.assertEquals(Status.BANNED, mockUser.getStatus());
+        verify(userRepository, times(1)).save(mockUser);
+    }
 
 }

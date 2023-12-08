@@ -66,4 +66,31 @@ public class UserTest {
     void isEnabled() {
         Assertions.assertTrue(user.isEnabled());
     }
+
+    @Test
+    void getLastname() {
+        Assertions.assertEquals("Doe", user.getLastname());
+    }
+
+    @Test
+    void getDob() {
+        Assertions.assertEquals(LocalDate.of(1990, 1, 1), user.getDob());
+    }
+
+    @Test
+    void getGender() {
+        Assertions.assertEquals(Gender.MALE, user.getGender());
+    }
+
+    @Test
+    void getRole() {
+        Assertions.assertEquals(Role.USER, user.getRole());
+    }
+
+    @Test
+    void getTokens() {
+        Assertions.assertEquals(Collections.emptyList(), user.getTokens());
+    }
+
+
 }

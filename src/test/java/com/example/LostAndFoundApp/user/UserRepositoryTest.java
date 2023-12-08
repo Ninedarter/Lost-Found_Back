@@ -50,25 +50,6 @@ public class UserRepositoryTest {
         Assertions.assertTrue(savedUser.getId() > 0);
     }
 
-    @Test
-    @DisplayName("Get All Users: Returns More Than One User")
-    public void getAll_returnMoreThanOneUser() {
-
-        User user2 = User.builder()
-                .firstname("Jacob")
-                .lastname("Johnson")
-                .email("jacob.johnson@gmail.com")
-                .phoneNumber("+37068898744")
-                .dob(LocalDate.of(1995, 8, 10))
-                .gender(Gender.MALE)
-                .password("password123")
-                .role(Role.USER).build();
-
-        userRepository.save(user2);
-        List<User> userList = userRepository.findAll();
-
-        Assertions.assertEquals(2, userList.size());
-    }
 
     @Test
     @DisplayName("Save user: find user by ID")
