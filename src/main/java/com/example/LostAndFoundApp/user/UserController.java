@@ -2,6 +2,7 @@ package com.example.LostAndFoundApp.user;
 
 import com.example.LostAndFoundApp.report.ReportUserRequest;
 import com.example.LostAndFoundApp.report.ReportUserResponse;
+import com.example.LostAndFoundApp.report.ReportsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.security.Principal;
 public class UserController {
 
     private final UserService service;
+    private final ReportsService reportsService;
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getById(@PathVariable("id") Long id) {
@@ -55,4 +57,12 @@ public class UserController {
         ReportUserResponse response = service.reportUser(request, connectedUser);
         return (response.isSuccess()) ? new ResponseEntity(response, HttpStatus.OK) : new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
+
+    @PostMapping("/reports/all")
+    public ResponseEntity<?> getAll() {
+
+        return new ResponseEntity(reportsService.getAllReports(), HttpStatus.OK);
+    }
+
+
 }
