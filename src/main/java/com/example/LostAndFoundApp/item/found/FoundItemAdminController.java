@@ -16,48 +16,48 @@ import java.util.List;
 @RequestMapping("/api/v1/admin/foundItem")
 @PreAuthorize("hasRole('ADMIN')")
 public class FoundItemAdminController {
-        private final FoundItemService foundItemService;
+    private final FoundItemService foundItemService;
 
-        @GetMapping("/all")
-        @PreAuthorize("hasAuthority('admin:read')")
-        public ResponseEntity<List<FoundItem>> getAll() {
-            List<FoundItem> all = foundItemService.getAll();
-            return new ResponseEntity<>(all, HttpStatus.OK);
-        }
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('admin:read')")
+    public ResponseEntity<List<FoundItem>> getAll() {
+        List<FoundItem> all = foundItemService.getAll();
+        return new ResponseEntity<>(all, HttpStatus.OK);
+    }
 
-        @PostMapping("/add")
-        @PreAuthorize("hasAuthority('admin:create')")
-        public ResponseEntity<FoundItemResponse> add(@RequestBody FoundItemRequest request) {
-            FoundItemResponse response = foundItemService.add(request);
-            return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.CREATED) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
+    @PostMapping("/add")
+    @PreAuthorize("hasAuthority('admin:create')")
+    public ResponseEntity<FoundItemResponse> add(@RequestBody FoundItemRequest request) {
+        FoundItemResponse response = foundItemService.add(request);
+        return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.CREATED) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
-        @GetMapping("/{id}")
-        @PreAuthorize("hasAuthority('admin:read')")
-        public ResponseEntity<FoundItemResponse> getById(@PathVariable("id") Long id) {
-            FoundItemResponse response = foundItemService.getById(id);
-            return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        }
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('admin:read')")
+    public ResponseEntity<FoundItemResponse> getById(@PathVariable("id") Long id) {
+        FoundItemResponse response = foundItemService.getById(id);
+        return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 
-        @PutMapping("/update")
-        @PreAuthorize("hasAuthority('admin:update')")
-        public ResponseEntity<FoundItemResponse> update(@RequestBody FoundItemRequest request) {
-            FoundItemResponse response = foundItemService.update(request);
-            return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
+    @PutMapping("/update")
+    @PreAuthorize("hasAuthority('admin:update')")
+    public ResponseEntity<FoundItemResponse> update(@RequestBody FoundItemRequest request) {
+        FoundItemResponse response = foundItemService.update(request);
+        return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
-        @DeleteMapping("/delete/{id}")
-        @PreAuthorize("hasAuthority('admin:delete')")
-        public ResponseEntity<FoundItemResponse> delete(@PathVariable("id") Long id) {
-            FoundItemResponse response = foundItemService.delete(id);
-            return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('admin:delete')")
+    public ResponseEntity<FoundItemResponse> delete(@PathVariable("id") Long id) {
+        FoundItemResponse response = foundItemService.delete(id);
+        return (response.isSuccess()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
-        @GetMapping("/coordinates")
-        @PreAuthorize("hasAuthority('admin:read')")
-        public ResponseEntity<FoundItemResponse> getByCoordinates(@RequestBody FoundItemRequest request) {
-            FoundItemResponse response = foundItemService.getByCoordinates(request);
-            return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    @GetMapping("/coordinates")
+    @PreAuthorize("hasAuthority('admin:read')")
+    public ResponseEntity<FoundItemResponse> getByCoordinates(@RequestBody FoundItemRequest request) {
+        FoundItemResponse response = foundItemService.getByCoordinates(request);
+        return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.OK) : new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 
-        }
+    }
 }
