@@ -2,13 +2,17 @@ package com.example.LostAndFoundApp.item.lost;
 
 import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
 import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
+import com.example.LostAndFoundApp.item.lost.request.LostItemRequestAdd;
 import com.example.LostAndFoundApp.item.lost.response.LostItemResponse;
 import com.example.LostAndFoundApp.mapping.MappingService;
+import com.example.LostAndFoundApp.user.User;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +62,15 @@ public class LostItemService {
             return new LostItemResponse(false, "Item already exists");
         }
 
+    }
+
+    public LostItemResponse addNew(LostItemRequestAdd request, Principal principal) {
+        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+
+        LostItem mappedItem = mappingService.mapLostItemNew(request, user);
+        coordinatesRepository.save(mappedItem.getCoordinates());
+        lostItemRepository.save(mappedItem);
+        return new LostItemResponse(true, "Created successfully");
     }
 
 

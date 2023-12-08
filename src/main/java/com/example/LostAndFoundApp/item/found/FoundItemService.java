@@ -3,7 +3,7 @@ package com.example.LostAndFoundApp.item.found;
 
 import com.example.LostAndFoundApp.item.coordinates.CoordinatesRepository;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
-import com.example.LostAndFoundApp.item.found.request.FoundItemRequestEasier;
+import com.example.LostAndFoundApp.item.found.request.FoundItemRequestAdd;
 import com.example.LostAndFoundApp.item.found.request.GetByCategoryRequest;
 import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
 import com.example.LostAndFoundApp.item.image.Image;
@@ -16,8 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -77,11 +75,11 @@ public class FoundItemService {
 
     }
 
-    public FoundItemResponse addEasier(FoundItemRequestEasier request, Principal connectedUser) {
+    public FoundItemResponse addNew(FoundItemRequestAdd request, Principal connectedUser) {
         User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 
         coordinatesRepository.save(request.getCoordinates());
-        foundItemRepository.save(mappingService.mapFoundItemEasier(request,user));
+        foundItemRepository.save(mappingService.mapFoundItemNew(request,user));
 
         return new FoundItemResponse(true, "Created successfully");
     }

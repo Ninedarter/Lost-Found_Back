@@ -1,6 +1,7 @@
 package com.example.LostAndFoundApp.item.lost;
 
 import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
+import com.example.LostAndFoundApp.item.lost.request.LostItemRequestAdd;
 import com.example.LostAndFoundApp.item.lost.response.LostItemResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -26,6 +28,12 @@ public class LostItemController {
     @PostMapping("/add")
     public ResponseEntity<LostItemResponse> add(@RequestBody LostItemRequest request) {
         LostItemResponse response = lostItemService.add(request);
+        return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.CREATED) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/add-new")
+    public ResponseEntity<LostItemResponse> addNew(@RequestBody LostItemRequestAdd request, Principal principal) {
+        LostItemResponse response = lostItemService.addNew(request,principal);
         return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.CREATED) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

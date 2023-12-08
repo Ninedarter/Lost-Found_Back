@@ -3,9 +3,10 @@ package com.example.LostAndFoundApp.mapping;
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.item.found.FoundItem;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
-import com.example.LostAndFoundApp.item.found.request.FoundItemRequestEasier;
+import com.example.LostAndFoundApp.item.found.request.FoundItemRequestAdd;
 import com.example.LostAndFoundApp.item.lost.LostItem;
 import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
+import com.example.LostAndFoundApp.item.lost.request.LostItemRequestAdd;
 import com.example.LostAndFoundApp.report.Report;
 import com.example.LostAndFoundApp.report.ReportUserRequest;
 import com.example.LostAndFoundApp.user.User;
@@ -14,6 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -37,6 +39,22 @@ public class MappingService {
         return item;
     }
 
+    public LostItem mapLostItemNew(LostItemRequestAdd request, User user) {
+        LostItem item = new LostItem();
+
+        item.setTitle(request.getTitle());
+        item.setDescription(request.getDescription());
+        item.setCategory(request.getCategory());
+        item.setDateLost(request.getDateLost());
+        item.setCreationTime(LocalDateTime.now());
+        item.setReward(request.getReward());
+
+        item.setCoordinates(request.getCoordinates());
+        item.setUser(user);
+
+        return item;
+    }
+
 
     public FoundItem mapFoundItem(FoundItemRequest request) {
 
@@ -54,7 +72,7 @@ public class MappingService {
         return item;
     }
 
-    public FoundItem mapFoundItemEasier(FoundItemRequestEasier request, User user) {
+    public FoundItem mapFoundItemNew(FoundItemRequestAdd request, User user) {
         FoundItem item = new FoundItem();
 
         item.setTitle(request.getTitle());

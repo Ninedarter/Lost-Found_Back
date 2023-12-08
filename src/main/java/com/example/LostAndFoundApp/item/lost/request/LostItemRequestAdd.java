@@ -1,4 +1,4 @@
-package com.example.LostAndFoundApp.item.found.request;
+package com.example.LostAndFoundApp.item.lost.request;
 
 import com.example.LostAndFoundApp.item.ItemCategory;
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
 
@@ -13,11 +14,13 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FoundItemRequestEasier {
-    private String title;
-    private String description;
+public class LostItemRequestAdd {
     private ItemCategory category;
-    private LocalDate dateFound;
+    private String title;
+    private LocalDate dateLost;
+    private String description;
     private Coordinates coordinates;
-    private String imageUrl;
+
+    @Nullable
+    private String reward;
 }

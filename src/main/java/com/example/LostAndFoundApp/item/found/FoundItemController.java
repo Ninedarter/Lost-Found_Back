@@ -1,7 +1,7 @@
 package com.example.LostAndFoundApp.item.found;
 
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
-import com.example.LostAndFoundApp.item.found.request.FoundItemRequestEasier;
+import com.example.LostAndFoundApp.item.found.request.FoundItemRequestAdd;
 import com.example.LostAndFoundApp.item.found.request.GetByCategoryRequest;
 import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +33,9 @@ public class FoundItemController {
         return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.CREATED) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/add-easier")
-    public ResponseEntity<FoundItemResponse> addEasier(@RequestBody FoundItemRequestEasier request, Principal principal) {
-        FoundItemResponse response = foundItemService.addEasier(request,principal);
+    @PostMapping("/add-new")
+    public ResponseEntity<FoundItemResponse> addNew(@RequestBody FoundItemRequestAdd request, Principal principal) {
+        FoundItemResponse response = foundItemService.addNew(request,principal);
         return (response.isSuccess()) ? new ResponseEntity<>(response, HttpStatus.CREATED) : new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
