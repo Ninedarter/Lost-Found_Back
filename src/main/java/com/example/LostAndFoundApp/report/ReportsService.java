@@ -36,13 +36,13 @@ public class ReportsService {
         return userReportsList;
     }
 
-    private List<ReportInfoDTO> mapReportsToDTOs(List<Report> reports) {
+    List<ReportInfoDTO> mapReportsToDTOs(List<Report> reports) {
         return reports.stream()
                 .map(this::mapReportToDTO)
                 .collect(Collectors.toList());
     }
 
-    private ReportInfoDTO mapReportToDTO(Report report) {
+    ReportInfoDTO mapReportToDTO(Report report) {
         ReportInfoDTO reportInfoDTO = new ReportInfoDTO();
         reportInfoDTO.setId(report.getId());
         reportInfoDTO.setDescription(report.getDescription());
@@ -55,7 +55,7 @@ public class ReportsService {
         return reportInfoDTO;
     }
 
-    private UserInfoDTO mapUserToDTO(User user) {
+    UserInfoDTO mapUserToDTO(User user) {
         UserInfoDTO userDTO = new UserInfoDTO();
         userDTO.setEmail(user.getEmail());
         userDTO.setUsername(user.getEmail()); // You might want to use a different field for username
