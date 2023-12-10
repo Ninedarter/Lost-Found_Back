@@ -5,6 +5,7 @@ import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.item.lost.LostItem;
 import com.example.LostAndFoundApp.item.lost.SampleTestObjects;
 import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
+import com.example.LostAndFoundApp.item.lost.request.LostItemRequestAdd;
 import com.example.LostAndFoundApp.item.lost.response.LostItemResponse;
 import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
 import com.example.LostAndFoundApp.user.User;
@@ -13,10 +14,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -165,32 +168,6 @@ public class LostItemControllerTest {
         Assertions.assertEquals(failureResponse, responseEntity.getBody());
     }
 
-//    @Test
-//    void getByCoordinates_ExistingCoordinates_ReturnsOk() {
-//
-//        LostItemRequest request = SampleTestObjects.createLostItemRequest();
-//        LostItemResponse successResponse = new LostItemResponse(true, com.example.LostAndFoundApp.item.found.SampleTestObjects.createLostItem(new User(), new Coordinates()));
-//        when(lostItemService.getByCoordinates(request)).thenReturn(successResponse);
-//
-//        ResponseEntity<LostItemResponse> responseEntity = lostItemController.getByCoordinates(request);
-//
-//        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-//        Assertions.assertEquals(successResponse, responseEntity.getBody());
-//    }
-
-//    @Test
-//    void getByCoordinates_NonExistingCoordinates_ReturnsNotFound() {
-//
-//        LostItemRequest request = new LostItemRequest();
-//        LostItemResponse failureResponse = new LostItemResponse(false, "Item not found by coordinates");
-//        when(lostItemService.getByCoordinates(request)).thenReturn(failureResponse);
-//
-//        ResponseEntity<LostItemResponse> responseEntity = lostItemController.getByCoordinates(request);
-//
-//        Assertions.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-//        Assertions.assertEquals(failureResponse, responseEntity.getBody());
-//    }
-
     @Test
     void getByUserId_ValidRequest_ReturnsLostItems() {
 
@@ -266,6 +243,34 @@ public class LostItemControllerTest {
         when(lostItemService.deleteUserLostItem(request)).thenReturn(failureResponse);
 
         ResponseEntity<LostItemResponse> responseEntity = lostItemController.deleteUserLostItem(request);
+
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        Assertions.assertEquals(failureResponse, responseEntity.getBody());
+    }
+
+    @Test
+    void addNew_ValidRequest_ReturnsCreated() {
+        LostItemRequestAdd request = SampleTestObjects.createLostItemRequestAdd();
+        Principal principal = Mockito.mock(Principal.class);
+        LostItemResponse successResponse = new LostItemResponse(true, "Created successfully");
+
+        Mockito.when(lostItemService.addNew(request, principal)).thenReturn(successResponse);
+
+        ResponseEntity<LostItemResponse> responseEntity = lostItemController.addNew(request, principal);
+
+        Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        Assertions.assertEquals(successResponse, responseEntity.getBody());
+    }
+
+    @Test
+    void addNew_InvalidRequest_ReturnsBadRequest() {
+        LostItemRequestAdd request = new LostItemRequestAdd();
+        Principal principal = Mockito.mock(Principal.class);
+        LostItemResponse failureResponse = new LostItemResponse(false, "Invalid request");
+
+        Mockito.when(lostItemService.addNew(request, principal)).thenReturn(failureResponse);
+
+        ResponseEntity<LostItemResponse> responseEntity = lostItemController.addNew(request, principal);
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         Assertions.assertEquals(failureResponse, responseEntity.getBody());

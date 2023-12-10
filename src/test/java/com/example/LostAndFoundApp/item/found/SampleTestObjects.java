@@ -3,6 +3,7 @@ package com.example.LostAndFoundApp.item.found;
 import com.example.LostAndFoundApp.item.ItemCategory;
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
+import com.example.LostAndFoundApp.item.found.request.FoundItemRequestAdd;
 import com.example.LostAndFoundApp.report.ReportUserRequest;
 import com.example.LostAndFoundApp.user.ChangePasswordRequest;
 import com.example.LostAndFoundApp.user.Gender;
@@ -100,4 +101,16 @@ public class SampleTestObjects {
                 .build();
     }
 
+    public static FoundItemRequestAdd createFoundItemRequestAdd() {
+
+        return FoundItemRequestAdd.builder()
+                .title("Sample Title")
+                .description("Sample Description")
+                .category(ItemCategory.CLOTHES)
+                .dateFound(LocalDate.now())
+                .coordinates(new Coordinates(10.0, 20.0))  // Assuming Coordinates class has a constructor
+                .imageUrl("https://example.com/sample-image.jpg")
+                .build();
+
+    }
 }

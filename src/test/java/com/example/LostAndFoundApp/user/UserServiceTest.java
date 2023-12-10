@@ -204,4 +204,83 @@ public class UserServiceTest {
         verify(userRepository, times(1)).save(mockUser);
     }
 
+    @Test
+    @DisplayName("Get user by email: user exists")
+    void testGetByEmail_UserExists_ReturnsOk() {
+        String email = "test@example.com";
+        User user = createUser();
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+
+        ResponseEntity<User> response = userService.getByEmail(email);
+
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertSame(user, response.getBody());
+    }
+
+    @Test
+    @DisplayName("Get user by email: user does not exist")
+    void testGetByEmail_UserDoesNotExist_ReturnsNotFound() {
+        String email = "nonexistent@example.com";
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        ResponseEntity<User> response = userService.getByEmail(email);
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertNotNull(response.getBody());
+    }
+
+    @Test
+    @DisplayName("Ban user by email: user exists")
+    void testBanUserByEmail_UserExists_StatusBanned() {
+        String email = "test@example.com";
+        User user = createUser();
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user)); // Use userRepository for findByEmail
+
+        userService.banUserByEmail(email);
+
+        Assertions.assertEquals(Status.BANNED, user.getStatus());
+        verify(userRepository, times(1)).save(user);
+    }
+
+    @Test
+    @DisplayName("Ban user by email: user does not exist")
+    void testBanUserByEmail_UserDoesNotExist_ReturnsNotFound() {
+        String email = "nonexistent@example.com";
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        Assertions.assertDoesNotThrow(() -> userService.banUserByEmail(email));
+    }
+
+    @Test
+    @DisplayName("Check if banned: user is banned")
+    void testCheckIfBanned_UserIsBanned_ReturnsTrue() {
+        User user = createUser();
+        user.setStatus(Status.BANNED);
+
+        Principal mockPrincipal = new UsernamePasswordAuthenticationToken(user, null);
+
+        ResponseEntity<Boolean> response = userService.checkIfBanned(mockPrincipal);
+
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(response.getBody());
+    }
+
+    @Test
+    @DisplayName("Check if banned: user is not banned")
+    void testCheckIfBanned_UserIsNotBanned_ReturnsFalse() {
+        User user = createUser();
+        user.setStatus(Status.DEFAULT);
+
+        Principal mockPrincipal = new UsernamePasswordAuthenticationToken(user, null);
+
+        ResponseEntity<Boolean> response = userService.checkIfBanned(mockPrincipal);
+
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertFalse(response.getBody());
+    }
+
 }

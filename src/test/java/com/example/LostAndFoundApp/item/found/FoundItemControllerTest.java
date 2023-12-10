@@ -3,6 +3,7 @@ package com.example.LostAndFoundApp.item.found;
 import com.example.LostAndFoundApp.item.ItemCategory;
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
+import com.example.LostAndFoundApp.item.found.request.FoundItemRequestAdd;
 import com.example.LostAndFoundApp.item.found.request.GetByCategoryRequest;
 import com.example.LostAndFoundApp.item.found.response.FoundItemResponse;
 import com.example.LostAndFoundApp.user.User;
@@ -11,10 +12,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -266,6 +269,49 @@ public class FoundItemControllerTest {
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         Assertions.assertEquals(failureResponse, responseEntity.getBody());
+    }
+
+    @Test
+    void addNew_ValidRequest_ReturnsCreated() {
+
+        FoundItemRequestAdd request = new FoundItemRequestAdd();
+        Principal principal = Mockito.mock(Principal.class);
+        FoundItemResponse successResponse = new FoundItemResponse(true, "Created successfully");
+
+        when(foundItemService.addNew(request, principal)).thenReturn(successResponse);
+
+        ResponseEntity<FoundItemResponse> responseEntity = foundItemController.addNew(request, principal);
+
+        Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        Assertions.assertEquals(successResponse, responseEntity.getBody());
+    }
+
+    @Test
+    void addNew_InvalidRequest_ReturnsBadRequest() {
+
+        FoundItemRequestAdd request = new FoundItemRequestAdd();
+        Principal principal = Mockito.mock(Principal.class);
+        FoundItemResponse failureResponse = new FoundItemResponse(false, "Invalid request");
+
+        when(foundItemService.addNew(request, principal)).thenReturn(failureResponse);
+
+        ResponseEntity<FoundItemResponse> responseEntity = foundItemController.addNew(request, principal);
+
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        Assertions.assertEquals(failureResponse, responseEntity.getBody());
+    }
+
+    @Test
+    void getAllByCategory_ReturnsOk() {
+        GetByCategoryRequest request = new GetByCategoryRequest();
+        FoundItemResponse successResponse = new FoundItemResponse(true);
+
+        when(foundItemService.getAllByCategory(request)).thenReturn(successResponse);
+
+        ResponseEntity<FoundItemResponse> responseEntity = foundItemController.getAllByCategory(request);
+
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertEquals(successResponse, responseEntity.getBody());
     }
 
 

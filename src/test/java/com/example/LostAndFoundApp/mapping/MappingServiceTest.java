@@ -6,6 +6,7 @@ import com.example.LostAndFoundApp.item.found.FoundItem;
 import com.example.LostAndFoundApp.item.found.FoundItemService;
 import com.example.LostAndFoundApp.item.found.SampleTestObjects;
 import com.example.LostAndFoundApp.item.found.request.FoundItemRequest;
+import com.example.LostAndFoundApp.item.found.request.FoundItemRequestAdd;
 import com.example.LostAndFoundApp.item.lost.LostItem;
 import com.example.LostAndFoundApp.item.lost.LostItemRepository;
 import com.example.LostAndFoundApp.item.lost.LostItemService;
@@ -23,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
@@ -59,7 +61,6 @@ public class MappingServiceTest {
 
     @BeforeEach
     void setUp() {
-
         user = SampleTestObjects.createUser();
         coordinates = SampleTestObjects.createCoordinates();
     }
@@ -157,4 +158,5 @@ public class MappingServiceTest {
                 .role(Role.USER)
                 .build();
     }
+
 }

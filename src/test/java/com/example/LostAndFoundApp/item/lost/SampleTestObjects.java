@@ -4,6 +4,7 @@ import com.example.LostAndFoundApp.item.ItemCategory;
 import com.example.LostAndFoundApp.item.coordinates.Coordinates;
 import com.example.LostAndFoundApp.item.found.FoundItem;
 import com.example.LostAndFoundApp.item.lost.request.LostItemRequest;
+import com.example.LostAndFoundApp.item.lost.request.LostItemRequestAdd;
 import com.example.LostAndFoundApp.user.Gender;
 import com.example.LostAndFoundApp.user.Role;
 import com.example.LostAndFoundApp.user.User;
@@ -82,5 +83,16 @@ public class SampleTestObjects {
 
     public static Coordinates createCoordinates() {
         return new Coordinates(40.7128, -74.0060);
+    }
+
+    public static LostItemRequestAdd createLostItemRequestAdd() {
+        LostItemRequestAdd request = new LostItemRequestAdd();
+        request.setCategory(ItemCategory.KEYS);
+        request.setTitle("Sample Title");
+        request.setDateLost(LocalDate.now());
+        request.setDescription("Sample Description");
+        request.setCoordinates(new Coordinates(10.00,20.11));
+        request.setReward("Sample Reward");
+        return request;
     }
 }
